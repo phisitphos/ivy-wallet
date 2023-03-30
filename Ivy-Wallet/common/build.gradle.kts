@@ -10,7 +10,7 @@ version = "1.0-SNAPSHOT"
 kotlin {
     android()
     jvm("desktop") {
-        jvmToolchain(19)
+        jvmToolchain(11)
     }
     sourceSets {
         val commonMain by getting {
@@ -29,11 +29,11 @@ kotlin {
 }
 
 android {
-    compileSdkVersion(33)
-    sourceSets["main"].manifest.srcFile("src/androidMain/AndroidManifest.xml")
+    compileSdk = Android.compileSdk
+    sourceSets["main"].manifest.srcFile("../android/src/main/AndroidManifest.xml")
     defaultConfig {
-        minSdkVersion(24)
-        targetSdkVersion(33)
+        minSdk = Android.minSdk
+        targetSdk = Android.targetSdk
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
