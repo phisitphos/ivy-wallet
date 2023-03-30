@@ -5,13 +5,9 @@ plugins {
     id("org.jetbrains.compose")
 }
 
-group = "ivy"
-version = "1.0-SNAPSHOT"
-
-
 kotlin {
     jvm {
-        jvmToolchain(11)
+        jvmToolchain(Desktop.jvmToolchain)
         withJava()
     }
     sourceSets {
@@ -30,8 +26,8 @@ compose.desktop {
         mainClass = "MainKt"
         nativeDistributions {
             targetFormats(TargetFormat.Dmg, TargetFormat.Msi, TargetFormat.Deb)
-            packageName = "Ivy-Wallet"
-            packageVersion = "1.0.0"
+            packageName = Desktop.packageName
+            packageVersion = Desktop.version
         }
     }
 }

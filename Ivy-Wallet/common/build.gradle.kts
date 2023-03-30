@@ -4,13 +4,10 @@ plugins {
     id("com.android.library")
 }
 
-group = "ivy"
-version = "1.0-SNAPSHOT"
-
 kotlin {
     android()
     jvm("desktop") {
-        jvmToolchain(11)
+        jvmToolchain(Desktop.jvmToolchain)
     }
     sourceSets {
         val commonMain by getting {

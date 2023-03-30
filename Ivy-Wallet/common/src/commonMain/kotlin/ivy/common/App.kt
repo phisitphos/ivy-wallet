@@ -1,12 +1,8 @@
 package ivy.common
 
-import androidx.compose.material.Text
 import androidx.compose.material.Button
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.material.Text
+import androidx.compose.runtime.*
 
 @Composable
 fun App() {
@@ -14,7 +10,7 @@ fun App() {
     val platformName = getPlatformName()
 
     Button(onClick = {
-        text = "Hello, ${platformName}"
+        text = "Hello, $platformName"
     }) {
         Text(text)
     }
