@@ -1,3 +1,3 @@
 package ivy.common
 
-expect fun getPlatformName(): String
+fun getPlatformName(): String = "Platform"
