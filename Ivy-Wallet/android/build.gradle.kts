@@ -4,11 +4,8 @@ plugins {
     kotlin("android")
 }
 
-group = "ivy"
-version = "1.0-SNAPSHOT"
-
 repositories {
-    jcenter()
+    mavenCentral()
 }
 
 dependencies {
@@ -19,13 +16,13 @@ dependencies {
 }
 
 android {
-    compileSdkVersion(33)
+    compileSdk = Android.compileSdk
     defaultConfig {
         applicationId = "ivy.android"
-        minSdkVersion(24)
-        targetSdkVersion(33)
-        versionCode = 1
-        versionName = "1.0-SNAPSHOT"
+        minSdk = Android.minSdk
+        targetSdk = Android.targetSdk
+        versionCode = Android.version.first
+        versionName = Android.version.second
     }
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_1_8
