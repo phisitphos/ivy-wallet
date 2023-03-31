@@ -2,6 +2,7 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    id("com.google.devtools.ksp")
 }
 
 kotlin {
@@ -11,14 +12,25 @@ kotlin {
     }
     sourceSets {
         val commonMain by getting {
+            kotlin.srcDir("$buildDir/generated/ksp/desktop")
+
             dependencies {
                 api(compose.runtime)
                 api(compose.foundation)
                 api(compose.material)
+
+                // region ArrowKt (Functional Programming)
+                api(platform("io.arrow-kt:arrow-stack:${Deps.Arrow.version}"))
+                api("io.arrow-kt:arrow-core")
+                api("io.arrow-kt:arrow-fx-coroutines")
+                api("io.arrow-kt:arrow-fx-stm")
+                api("io.arrow-kt:arrow-optics")
+                // endregion
             }
         }
         val commonTest by getting {
             dependencies {
+                dependsOn(commonMain)
                 implementation(kotlin("test"))
             }
         }
@@ -33,7 +45,12 @@ android {
         targetSdk = Android.targetSdk
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
+}
+
+dependencies {
+//    val arrowKsp = Deps.Arrow.Optics.ksp
+//    add("kspCommonMain", arrowKsp)
 }
