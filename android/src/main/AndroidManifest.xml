@@ -3,6 +3,7 @@
     <application
             android:allowBackup="false"
             android:supportsRtl="true"
+            android:label="Ivy Wallet"
             android:theme="@style/AppTheme">
         <activity android:name=".MainActivity" android:exported="true">
             <intent-filter>
