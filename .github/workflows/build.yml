@@ -81,7 +81,7 @@ jobs:
             ${{ runner.os }}-gradle-
 
       - name: Build APK
-        run: ./gradlew :android:assembleRelease
+        run: ./gradlew :android:assembleDemo
 
       - name: Upload Artifact
         uses: actions/upload-artifact@v2
@@ -153,7 +153,7 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Ivy-Wallet-Windows
-          path: /home/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/**/*.msi
+          path: D:\a\ivy-wallet\ivy-wallet\desktop\build\compose\binaries\main-release\msi\*.msi
 
   macos:
     runs-on: macos-latest
@@ -186,4 +186,4 @@ jobs:
         uses: actions/upload-artifact@v2
         with:
           name: Ivy-Wallet-MacOS
-          path: /home/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/**/*.dmg
+          path: /Users/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/main-release/dmg/*.dmg
