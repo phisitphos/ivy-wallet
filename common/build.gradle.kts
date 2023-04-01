@@ -37,7 +37,7 @@ kotlin {
 
 android {
     compileSdk = Android.compileSdk
-    sourceSets["main"].manifest.srcFile("../android/src/main/AndroidManifest.xml")
+    namespace = "ivy.common"
     defaultConfig {
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
