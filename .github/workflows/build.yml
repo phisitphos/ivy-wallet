@@ -46,6 +46,33 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
 
+  android:
+    runs-on: ubuntu-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 11
+
+      - name: Build APK
+        run: ./gradlew :android:assembleRelease
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Ivy-Wallet-APK
+          path: android/build/outputs/apk/demo/*.apk
 
   linux:
     runs-on: ubuntu-latest
@@ -69,9 +96,64 @@ jobs:
           path: ~/.gradle/caches
           key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
 
-      - name: Upload Linux app
+      - name: Upload Artifact
         uses: actions/upload-artifact@v2
         with:
           name: Ivy-Wallet-Linux
-          path: desktop/build/compose/binaries/main/**/*.deb
+          path: /home/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/**/*.deb
 
+  windows:
+    runs-on: windows-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 17
+
+      - name: Package Windows ".msi" distribution
+        run: ./gradlew :desktop:packageReleaseMsi
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Ivy-Wallet-Windows
+          path: /home/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/**/*.msi
+
+  macos:
+    runs-on: macos-latest
+    needs: build
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 17
+
+      - name: Package MacOS ".dmg" distribution
+        run: ./gradlew :desktop:packageReleaseDmg
+
+      - name: Cache Gradle dependencies
+        uses: actions/cache@v2
+        with:
+          path: ~/.gradle/caches
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+
+      - name: Upload Artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: Ivy-Wallet-MacOS
+          path: /home/runner/work/ivy-wallet/ivy-wallet/desktop/build/compose/binaries/**/*.dmg

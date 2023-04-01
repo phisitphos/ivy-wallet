@@ -34,5 +34,8 @@ android {
         getByName("release") {
             isMinifyEnabled = false
         }
+        create("demo") {
+            isMinifyEnabled = true
+        }
     }
 }
