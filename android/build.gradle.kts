@@ -20,7 +20,7 @@ dependencies {
 android {
     compileSdk = Android.compileSdk
     defaultConfig {
-        applicationId = "ivy.android"
+        applicationId = Android.applicationId
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk
         versionCode = Android.version.first
@@ -30,12 +30,41 @@ android {
         sourceCompatibility = JavaVersion.VERSION_1_8
         targetCompatibility = JavaVersion.VERSION_1_8
     }
+
+    signingConfigs {
+        getByName("debug") {
+            storeFile = file("../debug.jks")
+            storePassword = "IVY7834!DEbug"
+            keyAlias = "debug"
+            keyPassword = "IVY7834!DEbug"
+        }
+
+        create("release") {
+            storeFile = file("../sign.jks")
+            storePassword = System.getenv("SIGNING_STORE_PASSWORD")
+            keyAlias = System.getenv("SIGNING_KEY_ALIAS")
+            keyPassword = System.getenv("SIGNING_KEY_PASSWORD")
+        }
+    }
+
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
         }
         create("demo") {
             isMinifyEnabled = true
+            isShrinkResources = true
+            isDebuggable = false
+            isDefault = false
+
+            signingConfig = signingConfigs.getByName("debug")
+            proguardFiles(
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
+            )
+
+            applicationIdSuffix = ".demo"
+            matchingFallbacks.add("release")
         }
     }
 }
