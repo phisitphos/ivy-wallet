@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.compose")
     id("com.android.library")
     id("com.google.devtools.ksp")
+    id("app.cash.sqldelight") version Deps.SQLDelight.version
 }
 
 kotlin {
@@ -23,6 +24,10 @@ kotlin {
                 api("io.arrow-kt:arrow-fx-coroutines")
                 api("io.arrow-kt:arrow-fx-stm")
                 api("io.arrow-kt:arrow-optics")
+                // endregion
+
+                // region SQLDelight
+                implementation("app.cash.sqldelight:coroutines-extensions:${Deps.SQLDelight.version}")
                 // endregion
             }
         }
@@ -46,6 +51,20 @@ kotlin {
                 implementation("io.kotest.extensions:kotest-property-arrow:$kotestArrow")
                 // endregion
                 // endregion
+            }
+        }
+
+        val androidMain by getting {
+            dependencies {
+                dependsOn(commonMain)
+                implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
+            }
+        }
+
+        val desktopMain by getting {
+            dependencies {
+                dependsOn(commonMain)
+                implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
             }
         }
     }
@@ -73,4 +92,12 @@ android {
 dependencies {
 //    val arrowKsp = Deps.Arrow.Optics.ksp
 //    add("kspCommonMain", arrowKsp)
+}
+
+sqldelight {
+    databases {
+        create("Database") {
+            packageName.set("ivy")
+        }
+    }
 }

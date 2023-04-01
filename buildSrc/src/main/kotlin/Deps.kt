@@ -17,4 +17,9 @@ object Deps {
         //https://search.maven.org/search?q=g:org.junit.jupiter
         const val versionJUnit5 = "5.9.2"
     }
+
+    object SQLDelight {
+        //https://cashapp.github.io/sqldelight/
+        const val version = "2.0.0-alpha05"
+    }
 }
