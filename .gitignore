@@ -6,8 +6,10 @@
 
 # Gradle files
 .gradle/
+**/.gradle
 build/
-out/
+**/build
+**/out/
 
 # Native files
 *.o

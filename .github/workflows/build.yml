@@ -61,7 +61,7 @@ jobs:
           java-version: 17
 
       - name: Package Linux ".deb" distribution
-        run: ./gradlew :desktop:packageDebDistribution
+        run: ./gradlew :desktop:packageReleaseDeb
 
       - name: Cache Gradle dependencies
         uses: actions/cache@v2
