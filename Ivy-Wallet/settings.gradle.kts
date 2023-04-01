@@ -17,4 +17,9 @@ pluginManagement {
 
 rootProject.name = "Ivy-Wallet"
 
-include(":android", ":desktop", ":common")
+include(
+    ":android",
+    ":desktop",
+    ":common",
+    ":home",
+)
