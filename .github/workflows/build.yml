@@ -16,11 +16,15 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Cache Gradle dependencies
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build
         run: ./gradlew buildDebug
@@ -39,11 +43,15 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Cache Gradle dependencies
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build
         run: ./gradlew testDebug
@@ -62,11 +70,15 @@ jobs:
           java-version: 11
           cache: gradle
 
-      - name: Cache Gradle dependencies
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Build APK
         run: ./gradlew :android:assembleRelease
@@ -91,11 +103,15 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Gradle Cache
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Package Linux ".deb" distribution
         run: ./gradlew :desktop:packageReleaseDeb
@@ -120,11 +136,15 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Gradle Cache
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Package Windows ".msi" distribution
         run: ./gradlew :desktop:packageReleaseMsi
@@ -149,11 +169,15 @@ jobs:
           java-version: 17
           cache: gradle
 
-      - name: Gradle Cache
+      - name: Gradle caching
         uses: actions/cache@v2
         with:
-          path: ~/.gradle/caches
-          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle.properties') }}
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
       - name: Package MacOS ".dmg" distribution
         run: ./gradlew :desktop:packageReleaseDmg
