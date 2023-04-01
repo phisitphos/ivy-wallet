@@ -30,6 +30,22 @@ kotlin {
             dependencies {
                 dependsOn(commonMain)
                 implementation(kotlin("test"))
+
+                // region Kotest
+                implementation("org.junit.jupiter:junit-jupiter:${Deps.Kotest.versionJUnit5}")
+                val kotestVersion = Deps.Kotest.version
+                implementation("io.kotest:kotest-runner-junit5:$kotestVersion")
+                implementation("io.kotest:kotest-assertions-core:$kotestVersion")
+                implementation("io.kotest:kotest-property:$kotestVersion")
+                implementation("io.kotest:kotest-framework-datatest:$kotestVersion")
+
+                // Kotest - Arrow extensions
+                val kotestArrow = Deps.Kotest.versionArrowExt
+                implementation("io.kotest.extensions:kotest-assertions-arrow:$kotestArrow")
+                implementation("io.kotest.extensions:kotest-assertions-arrow-fx-coroutines:$kotestArrow")
+                implementation("io.kotest.extensions:kotest-property-arrow:$kotestArrow")
+                // endregion
+                // endregion
             }
         }
     }
@@ -45,6 +61,12 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
+    }
+
+    testOptions {
+        unitTests.all {
+            it.useJUnitPlatform()
+        }
     }
 }
 
