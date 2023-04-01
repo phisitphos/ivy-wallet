@@ -1,0 +1,43 @@
+# IntelliJ IDEA files
+.idea/
+*.iml
+*.ipr
+*.iws
+
+# Gradle files
+.gradle/
+build/
+out/
+
+# Native files
+*.o
+*.dylib
+*.so
+*.def
+*.klib
+*.hprof
+
+# Local configuration files
+local.properties
+
+# Generated files
+gen/
+gen-external-apklibs/
+
+# Logs and backups
+*.log
+*.log.*
+*.stackdump
+*.diff
+*.patch
+*.orig
+
+# Miscellaneous
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+Icon?
+ehthumbs.db
+Thumbs.db
