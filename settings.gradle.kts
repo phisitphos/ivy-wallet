@@ -20,6 +20,6 @@ rootProject.name = "Ivy-Wallet"
 include(
     ":android",
     ":desktop",
-    ":common",
+    ":core",
     ":home",
 )

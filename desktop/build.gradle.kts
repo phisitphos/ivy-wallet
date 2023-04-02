@@ -13,7 +13,7 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(project(":common"))
+                implementation(project(":core"))
                 implementation(compose.desktop.currentOs)
                 implementation(project(":home"))
             }
