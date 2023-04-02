@@ -1,4 +1,4 @@
-name: Build-Test & Package Multiplatform
+name: Kotlin Multiplatform CI/CD
 
 on: push
 
