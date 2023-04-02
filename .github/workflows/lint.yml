@@ -1,4 +1,4 @@
-name: Lint and Style Enforcement
+name: Lint and Code Style
 
 on: push
 
