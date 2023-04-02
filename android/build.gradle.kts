@@ -2,6 +2,7 @@ plugins {
     id("org.jetbrains.compose")
     id("com.android.application")
     kotlin("android")
+    kotlin("plugin.serialization")
 }
 
 repositories {
@@ -15,6 +16,10 @@ dependencies {
     implementation("androidx.core:core-ktx:1.9.0")
 
     implementation(project(":home"))
+
+    // Becuase of Proguard
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinXSerialization.version}")
+
 }
 
 android {
