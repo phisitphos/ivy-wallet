@@ -7,7 +7,7 @@ plugins {
 
 kotlin {
     jvm {
-        jvmToolchain(Desktop.jvmToolchain)
+        jvmToolchain(Java.jvmToolchain)
         withJava()
     }
     sourceSets {

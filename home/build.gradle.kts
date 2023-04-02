@@ -8,7 +8,7 @@ plugins {
 kotlin {
     android()
     jvm("desktop") {
-        jvmToolchain(Desktop.jvmToolchain)
+        jvmToolchain(Java.jvmToolchain)
     }
     sourceSets {
         val commonMain by getting {
@@ -33,7 +33,7 @@ android {
         targetSdk = Android.targetSdk
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = Java.version
+        targetCompatibility = Java.version
     }
 }

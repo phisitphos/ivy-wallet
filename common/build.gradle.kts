@@ -8,8 +8,8 @@ plugins {
 
 kotlin {
     android()
-    jvm("desktop") {
-        jvmToolchain(Desktop.jvmToolchain)
+    jvm {
+        jvmToolchain(Java.jvmToolchain)
     }
     sourceSets {
         val commonMain by getting {
@@ -31,9 +31,24 @@ kotlin {
                 // endregion
             }
         }
+
+        val androidMain by getting {
+            dependencies {
+                dependsOn(commonMain)
+                implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
+            }
+        }
+
+        val jvmMain by getting {
+            dependencies {
+                dependsOn(commonMain)
+                implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
+            }
+        }
         val commonTest by getting {
             dependencies {
                 dependsOn(commonMain)
+                dependsOn(jvmMain)
                 implementation(kotlin("test"))
 
                 // region Kotest
@@ -53,20 +68,6 @@ kotlin {
                 // endregion
             }
         }
-
-        val androidMain by getting {
-            dependencies {
-                dependsOn(commonMain)
-                implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
-            }
-        }
-
-        val desktopMain by getting {
-            dependencies {
-                dependsOn(commonMain)
-                implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
-            }
-        }
     }
 }
 
@@ -78,8 +79,8 @@ android {
         targetSdk = Android.targetSdk
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = Java.version
+        targetCompatibility = Java.version
     }
 
     testOptions {
@@ -99,5 +100,11 @@ sqldelight {
         create("Database") {
             packageName.set("ivy")
         }
+    }
+}
+
+tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach {
+    kotlinOptions {
+        jvmTarget = Java.jvmToolchain.toString()
     }
 }
