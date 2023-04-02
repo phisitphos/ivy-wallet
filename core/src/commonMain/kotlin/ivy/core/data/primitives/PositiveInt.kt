@@ -22,6 +22,8 @@ value class PositiveInt private constructor(val value: Int) {
     operator fun rem(other: PositiveInt): Option<PositiveInt> =
         if (other.value != 0) fromInt(value % other.value) else None
 
+    override fun toString(): String = value.toString()
+
     companion object {
         fun fromInt(value: Int): Option<PositiveInt> =
             if (value > 0) Some(PositiveInt(value)) else None

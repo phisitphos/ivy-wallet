@@ -22,6 +22,8 @@ value class PositiveDouble private constructor(val value: Double) {
     operator fun rem(other: PositiveDouble): Option<PositiveDouble> =
         if (other.value != 0.0) fromDouble(value % other.value) else None
 
+    override fun toString(): String = value.toString()
+
     companion object {
         fun fromDouble(value: Double): Option<PositiveDouble> =
             if (value > 0.0) Some(PositiveDouble(value)) else None

@@ -13,6 +13,8 @@ value class NotBlankTrimmedString private constructor(val value: String) {
     fun substring(startIndex: Int, endIndex: Int = value.length): Option<NotBlankTrimmedString> =
         fromString(value.substring(startIndex, endIndex))
 
+    override fun toString(): String = value
+
     companion object {
         fun fromString(value: String): Option<NotBlankTrimmedString> {
             val trimmedValue = value.trim()

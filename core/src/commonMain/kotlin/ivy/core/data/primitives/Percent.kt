@@ -19,6 +19,8 @@ value class Percent private constructor(val value: Float) {
     operator fun div(factor: Float): Option<Percent> =
         if (factor != 0f) fromFloat(value / factor) else None
 
+    override fun toString(): String = "$value%"
+
     companion object {
         fun fromFloat(value: Float): Option<Percent> =
             if (value in 0f..100f) Some(Percent(value)) else None

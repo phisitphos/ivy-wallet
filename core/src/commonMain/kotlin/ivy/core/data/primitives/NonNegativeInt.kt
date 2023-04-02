@@ -22,6 +22,8 @@ value class NonNegativeInt private constructor(val value: Int) {
     operator fun rem(other: NonNegativeInt): Option<NonNegativeInt> =
         if (other.value != 0) fromInt(value % other.value) else None
 
+    override fun toString(): String = value.toString()
+
     companion object {
         fun fromInt(value: Int): Option<NonNegativeInt> =
             if (value >= 0) Some(NonNegativeInt(value)) else None
