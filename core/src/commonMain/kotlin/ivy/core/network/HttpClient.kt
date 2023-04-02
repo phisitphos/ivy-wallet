@@ -7,7 +7,6 @@ import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 
-
 fun createHttpClient(): HttpClient {
     return HttpClient(OkHttp) {
         install(ContentNegotiation) {

@@ -44,6 +44,8 @@ buildscript {
 
 
 // region Ktlint
+fun isNotGenerated(it: File) = !it.path.contains("build")
+
 tasks.register<JavaExec>("ktlint") {
     group = "verification"
     description = "Check Kotlin code style."
@@ -51,9 +53,22 @@ tasks.register<JavaExec>("ktlint") {
     classpath = project.buildscript.configurations["classpath"]
     val sourcePaths = subprojects.flatMap {
         it.extensions.getByType(KotlinProjectExtension::class.java).sourceSets.flatMap { sourceSet ->
-            sourceSet.kotlin.sourceDirectories
+            sourceSet.kotlin.sourceDirectories.filter(::isNotGenerated)
         }
     }
     args(sourcePaths.map { it.absolutePath + "/**/*.kt" })
+}
+
+tasks.register<JavaExec>("ktlintFormat") {
+    group = "formatting"
+    description = "Auto-format Kotlin code using Ktlint."
+    main = "com.pinterest.ktlint.Main"
+    classpath = project.buildscript.configurations["classpath"]
+    val sourcePaths = subprojects.flatMap {
+        it.extensions.getByType(KotlinProjectExtension::class.java).sourceSets.flatMap { sourceSet ->
+            sourceSet.kotlin.sourceDirectories.filter(::isNotGenerated)
+        }
+    }
+    args(listOf("--experimental", "--format") + sourcePaths.map { it.absolutePath + "/**/*.kt" })
 }
 // endregion
