@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("com.google.devtools.ksp")
     id("app.cash.sqldelight") version Deps.SQLDelight.version
+    kotlin("plugin.serialization")
 }
 
 kotlin {
@@ -28,6 +29,10 @@ kotlin {
 
                 // region SQLDelight
                 implementation("app.cash.sqldelight:coroutines-extensions:${Deps.SQLDelight.version}")
+                // endregion
+
+                // region KotlinX Serialization
+                implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinXSerialization.version}")
                 // endregion
             }
         }
@@ -64,7 +69,6 @@ kotlin {
                 implementation("io.kotest.extensions:kotest-assertions-arrow:$kotestArrow")
                 implementation("io.kotest.extensions:kotest-assertions-arrow-fx-coroutines:$kotestArrow")
                 implementation("io.kotest.extensions:kotest-property-arrow:$kotestArrow")
-                // endregion
                 // endregion
             }
         }
@@ -107,4 +111,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
     kotlinOptions {
         jvmTarget = Java.jvmToolchain.toString()
     }
+}
+
+tasks.named<Test>("jvmTest") {
+    useJUnitPlatform()
 }
