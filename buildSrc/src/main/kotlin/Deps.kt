@@ -28,4 +28,9 @@ object Deps {
         //https://kotlinlang.org/docs/serialization.html
         const val version = "1.5.0"
     }
+
+    object Ktor {
+        //https://ktor.io/docs/client-dependencies.html
+        const val version = "2.2.4"
+    }
 }

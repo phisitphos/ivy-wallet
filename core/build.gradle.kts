@@ -34,6 +34,14 @@ kotlin {
                 // region KotlinX Serialization
                 implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinXSerialization.version}")
                 // endregion
+
+                // region Ktor
+                implementation("io.ktor:ktor-client-core:${Deps.Ktor.version}")
+                implementation("io.ktor:ktor-client-logging:${Deps.Ktor.version}")
+                implementation("io.ktor:ktor-client-content-negotiation:${Deps.Ktor.version}")
+                implementation("io.ktor:ktor-serialization-kotlinx-json:${Deps.Ktor.version}")
+                implementation("io.ktor:ktor-client-okhttp:${Deps.Ktor.version}")
+                // endregion
             }
         }
 
@@ -50,6 +58,7 @@ kotlin {
                 implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
             }
         }
+
         val commonTest by getting {
             dependencies {
                 dependsOn(commonMain)
