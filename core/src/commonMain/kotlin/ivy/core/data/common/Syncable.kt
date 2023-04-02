@@ -1,9 +1,17 @@
 package ivy.core.data.common
 
-import java.time.LocalDateTime
+import java.time.Instant
 import java.util.*
 
+/**
+ * Represents a unique identifier for objects.
+ * This interface is a simple wrapper around a UUID to provide type-safety and ensure
+ * that the unique identifier is used consistently across various classes and interfaces.
+ */
 interface UniqueId {
+    /**
+     * The UUID value of the unique identifier.
+     */
     val value: UUID
 }
 
@@ -37,5 +45,5 @@ interface Syncable<TID : UniqueId> : Identifiable<TID>, Deletable {
     /**
      * The timestamp of the last update of this object.
      */
-    val lastUpdated: LocalDateTime
+    val lastUpdated: Instant
 }

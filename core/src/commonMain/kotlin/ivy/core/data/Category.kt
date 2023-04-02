@@ -2,12 +2,12 @@ package ivy.core.data
 
 import ivy.core.data.common.Syncable
 import ivy.core.data.common.UniqueId
-import java.time.LocalDateTime
+import java.time.Instant
 import java.util.*
 
 data class Category(
     override val id: CategoryId,
-    override val lastUpdated: LocalDateTime,
+    override val lastUpdated: Instant,
     override val deleted: Boolean
 ) : Syncable<CategoryId>
 
