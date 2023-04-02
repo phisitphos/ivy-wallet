@@ -1,0 +1,60 @@
+name: Lint (Ktlint + Checkstyle)
+
+on: push
+
+jobs:
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up JDK
+        uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: 17
+
+      - name: Gradle caching
+        uses: actions/cache@v2
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
+
+      - name: Run Lint checks
+        run: ./gradlew --continue lintDebug checkstyleMain checkstyleTest ktlint
+
+      - name: Setup .NET Core SDK
+        uses: actions/setup-dotnet@v1
+        with:
+          dotnet-version: 3.1.x
+
+      - name: Install ReportGenerator
+        run: dotnet tool install dotnet-reportgenerator-globaltool --tool-path ./reportgenerator
+
+      - name: Generate HTML reports
+        run: |
+          find . -type f -name "lint-results-debug.xml" -exec ./reportgenerator/ReportGenerator -reports:{} -targetdir:./reports/lint-results-debug -reporttypes:HTMLInline \;
+          find . -type f -name "checkstyle.xml" -exec ./reportgenerator/ReportGenerator -reports:{} -targetdir:./reports/checkstyle -reporttypes:HTMLInline \;
+          find . -type f -name "ktlint.xml" -exec ./reportgenerator/ReportGenerator -reports:{} -targetdir:./reports/ktlint -reporttypes:HTMLInline \;
+
+      - name: Merge HTML reports
+        run: |
+          echo "Merging HTML reports..."
+          echo "<!DOCTYPE html><html><head><title>Merged Lint Reports</title></head><body>" > merged_report.html
+          find reports/ -type f -name "index.html" -exec sed -n '/<body>/,/<\/body>/p' {} + | sed -e '1d;$d' >> merged_report.html
+          echo "</body></html>" >> merged_report.html
+          echo "Reports merged into merged_report.html"
+
+      - name: Upload lint reports
+        if: always()
+        uses: actions/upload-artifact@v2
+        with:
+          name: lint-reports
+          path: |
+            **/build/reports
+            merged_report.html
