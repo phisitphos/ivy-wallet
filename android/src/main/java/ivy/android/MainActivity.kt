@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
-import ivy.common.App
-import ivy.common.persistence.DriverFactory
-import ivy.common.persistence.playWithDb
+import ivy.core.App
+import ivy.core.persistence.DriverFactory
+import ivy.core.persistence.playWithDb
 import ivy.home.HomeScreen
 
 class MainActivity : AppCompatActivity() {

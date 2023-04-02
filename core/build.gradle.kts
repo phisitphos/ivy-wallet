@@ -73,7 +73,7 @@ kotlin {
 
 android {
     compileSdk = Android.compileSdk
-    namespace = "ivy.common"
+    namespace = "ivy.core"
     defaultConfig {
         minSdk = Android.minSdk
         targetSdk = Android.targetSdk

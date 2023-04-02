@@ -1,4 +1,4 @@
-package ivy.common.persistence
+package ivy.core.persistence
 
 import app.cash.sqldelight.db.SqlDriver
 import app.cash.sqldelight.driver.jdbc.sqlite.JdbcSqliteDriver
