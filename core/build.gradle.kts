@@ -40,7 +40,6 @@ kotlin {
                 implementation("io.ktor:ktor-client-logging:${Deps.Ktor.version}")
                 implementation("io.ktor:ktor-client-content-negotiation:${Deps.Ktor.version}")
                 implementation("io.ktor:ktor-serialization-kotlinx-json:${Deps.Ktor.version}")
-                implementation("io.ktor:ktor-client-okhttp:${Deps.Ktor.version}")
                 // endregion
             }
         }
@@ -48,6 +47,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 dependsOn(commonMain)
+                implementation("io.ktor:ktor-client-okhttp:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
             }
         }
@@ -55,6 +55,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 dependsOn(commonMain)
+                implementation("io.ktor:ktor-client-apache:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
             }
         }

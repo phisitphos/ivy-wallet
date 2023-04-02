@@ -1,14 +1,16 @@
 package ivy.core.network
 
 import io.ktor.client.*
-import io.ktor.client.engine.okhttp.*
+import io.ktor.client.engine.*
 import io.ktor.client.plugins.*
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.plugins.logging.*
 import io.ktor.serialization.kotlinx.json.*
 
+expect val httpClientEngine: HttpClientEngine
+
 fun createHttpClient(): HttpClient {
-    return HttpClient(OkHttp) {
+    return HttpClient(httpClientEngine) {
         install(ContentNegotiation) {
             json()
         }
