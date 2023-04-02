@@ -1,3 +1,5 @@
+#!/bin/bash
+
 PR_ID=$1
 BRANCH_NAME=$2
 

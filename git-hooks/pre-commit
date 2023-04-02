@@ -1,0 +1,17 @@
+#!/bin/sh
+
+# Get the root directory of the Git project
+git_root=$(git rev-parse --show-toplevel)
+
+# Run the ktlintFormat task from the root directory
+"$git_root"/gradlew ktlintFormat
+
+# Check if any files were modified by the ktlintFormat task
+modified_files=$(git diff --name-only)
+
+if [ -n "$modified_files" ]; then
+  echo "The following files were modified by ktlintFormat:"
+  echo "$modified_files"
+  echo "Please review and stage the changes before committing."
+  exit 1
+fi
