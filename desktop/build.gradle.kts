@@ -30,5 +30,11 @@ compose.desktop {
             packageName = Desktop.packageName
             packageVersion = Desktop.version
         }
+
+        buildTypes.release {
+            proguard {
+                configurationFiles.from("proguard-rules.pro")
+            }
+        }
     }
 }

@@ -1,0 +1,4 @@
+-dontwarn org.apache.commons.logging.**
+-dontwarn org.apache.http.**
+-dontwarn org.slf4j.helpers.**
+-dontwarn kotlinx.serialization.internal.**
