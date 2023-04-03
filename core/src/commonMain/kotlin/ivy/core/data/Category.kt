@@ -48,6 +48,7 @@ value class CategoryId(override val value: UUID) : UniqueId
  * @property description An optional user-defined description for the category, represented by a [NotBlankTrimmedString].
  * @property type The type of the category, represented by a [CategoryType] (Income, Expense, or Both).
  * @property parentId The optional parent category's [CategoryId], used for organizing categories hierarchically.
+ * @property excluded Indicates whether the category is excluded or not from various statistics.
  * @property archived Indicates whether the category is archived or not (from the [Archiveable] interface).
  * @property order The display order of the category, relative to other reorderable categories (from the [Reorderable] interface).
  * @property id The unique identifier for the category, represented by a [CategoryId] (from the [Identifiable] and [Syncable] interfaces).
@@ -62,6 +63,7 @@ data class Category(
     val type: CategoryType,
     val parentId: CategoryId?,
 
+    val excluded: Boolean,
     override val archived: Boolean,
     override val order: Double,
 

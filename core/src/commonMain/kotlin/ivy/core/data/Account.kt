@@ -1,52 +1,42 @@
 package ivy.core.data
 
 import ivy.core.data.common.*
-import ivy.core.data.primitives.MonthDate
-import ivy.core.data.primitives.NonNegativeDouble
 import ivy.core.data.primitives.NotBlankTrimmedString
-import ivy.core.data.primitives.Percent
 import java.awt.Color
 import java.time.Instant
 import java.util.*
 
-sealed interface AccountType {
-    object Cash : AccountType
-    object Bank : AccountType
-    data class LoanReceivable(
-        val interestRate: Percent?
-    ) : AccountType
-
-    object Stocks : AccountType
-    object Bonds : AccountType
-    object MutualFunds : AccountType
-    object ETFs : AccountType
-    object Cryptocurrencies : AccountType
-    object Commodities : AccountType
-    object RealEstate : AccountType
-    object Savings : AccountType
-    object OtherAssets : AccountType
-    data class CreditCard(
-        val limit: NonNegativeDouble?,
-        val dueDate: MonthDate?,
-        val closingDate: MonthDate?
-    ) : AccountType
-
-    data class LoanPayable(
-        val interestRate: Percent?
-    ) : AccountType
-
-    object LinesOfCredit : AccountType
-    object Overdraft : AccountType
-    object AccountsPayable : AccountType
-    object OtherLiabilities : AccountType
-}
-
+/**
+ * Represents a unique identifier for an Account.
+ * @property value The UUID for the AccountId.
+ */
 @JvmInline
 value class AccountId(override val value: UUID) : UniqueId
 
+/**
+ * Represents an asset code for an account.
+ * @property code The non-blank trimmed string value for the asset code.
+ */
 @JvmInline
 value class AssetCode(val code: NotBlankTrimmedString)
 
+/**
+ * Account represents a user's financial account within the application.
+ *
+ * @property name The name of the Account (must be a non-blank trimmed string).
+ * @property description An optional description for the Account (must be a non-blank or trimmed string).
+ * @property type The type of the Account, as defined in the AccountType sealed interface.
+ * @property assetCode The asset code associated with the Account.
+ * @property folderId An optional unique identifier for the folder the Account is in.
+ * @property icon An optional unique identifier for the icon associated with the Account.
+ * @property color An optional color associated with the Account.
+ * @property excluded A boolean flag indicating whether the Account is excluded from statistics.
+ * @property archived A boolean flag indicating whether the Account is archived.
+ * @property order A double value representing the order of the Account in the list.
+ * @property id The unique identifier for the Account.
+ * @property deleted A boolean flag indicating whether the Account is deleted.
+ * @property lastUpdated The timestamp of the last update to the Account.
+ */
 data class Account(
     val name: NotBlankTrimmedString,
     val description: NotBlankTrimmedString?,
@@ -56,6 +46,7 @@ data class Account(
     val icon: ItemIconId?,
     val color: Color?,
 
+    val excluded: Boolean,
     override val archived: Boolean,
     override val order: Double,
 
