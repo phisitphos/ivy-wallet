@@ -1,8 +1,8 @@
 package ivy.core.data
 
+import androidx.compose.ui.graphics.Color
 import ivy.core.data.common.*
 import ivy.core.data.primitives.NotBlankTrimmedString
-import java.awt.Color
 import java.time.Instant
 import java.util.*
 
