@@ -1,8 +1,8 @@
 package ivy.core.data
 
-import ivy.core.data.primitives.MonthDate
 import ivy.core.data.primitives.NonNegativeDouble
 import ivy.core.data.primitives.Percent
+import ivy.core.data.time.MonthDate
 
 /**
  * Represents the two main classes of accounts: Assets and Liabilities.
