@@ -2,7 +2,7 @@ package ivy.core.data
 
 import ivy.core.data.primitives.NonNegativeDouble
 import ivy.core.data.primitives.Percent
-import ivy.core.data.time.MonthDate
+import ivy.core.data.time.DayOfMonth
 
 /**
  * Represents the two main classes of accounts: Assets and Liabilities.
@@ -113,8 +113,8 @@ object OtherAssets : AccountType {
  */
 data class CreditCard(
     val limit: NonNegativeDouble?,
-    val dueDate: MonthDate?,
-    val closingDate: MonthDate?
+    val dueDate: DayOfMonth?,
+    val closingDate: DayOfMonth?
 ) : AccountType {
     override val accountClass: AccountClass = AccountClass.Liability
 }

@@ -14,13 +14,6 @@ import java.util.*
 value class AccountId(override val value: UUID) : UniqueId
 
 /**
- * Represents an asset code for an account.
- * @property code The non-blank trimmed string value for the asset code.
- */
-@JvmInline
-value class AssetCode(val code: NotBlankTrimmedString)
-
-/**
  * Account represents a user's financial account within the application.
  *
  * @property name The name of the Account (must be a non-blank trimmed string).
