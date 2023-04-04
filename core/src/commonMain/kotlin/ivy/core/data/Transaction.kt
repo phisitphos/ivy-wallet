@@ -1,5 +1,7 @@
 package ivy.core.data
 
+import ivy.core.data.common.Archiveable
+import ivy.core.data.common.Reorderable
 import ivy.core.data.common.Syncable
 import ivy.core.data.common.UniqueId
 import ivy.core.data.primitives.NotBlankTrimmedString
@@ -15,8 +17,11 @@ value class TransactionId(override val value: UUID) : UniqueId
 /**
  * Represents a tag associated with a [Transaction].
  */
-@JvmInline
-value class TransactionTag(val tag: NotBlankTrimmedString)
+data class TransactionTag(
+    val tag: NotBlankTrimmedString,
+    override val archived: Boolean,
+    override val order: Double
+) : Archiveable, Reorderable
 
 /**
  * Represents a financial transaction, which can be an [Income], [Expense], or [Transfer].
