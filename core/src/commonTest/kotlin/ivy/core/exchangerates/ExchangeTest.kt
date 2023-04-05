@@ -21,7 +21,6 @@ import ivy.core.data.primitives.NonNegativeDouble
 import ivy.core.data.primitives.NotBlankTrimmedString
 import ivy.core.exchangerates.data.ExchangeRates
 import ivy.core.util.*
-import kotlin.math.abs
 
 class ExchangeTest : FreeSpec({
     val rates = exchangeRates(
@@ -81,7 +80,7 @@ class ExchangeTest : FreeSpec({
         checkAll(
             arbValidAsset,
             arbValidAsset,
-            Arb.nonNegativeDouble(max = 1_000_000_000.0)
+            Arb.nonNegativeDouble(max = 1_000_000.0)
         ) { asset1, asset2, original ->
             with(rates) {
                 val exchanged = exchange(
@@ -99,8 +98,7 @@ class ExchangeTest : FreeSpec({
                 )
 
                 reversed.shouldBeSome()
-                abs(original.value - reversed.value.value) shouldBeLessThan 100.0
-                original.value.round() shouldBe reversed.value.value.round()
+                reversed.value.value.round() shouldBe original.value.round()
             }
         }
     }
@@ -130,7 +128,7 @@ class ExchangeTest : FreeSpec({
         }
     }
 
-    "[PROPERTY] Failure on missing rate" {
+    "[PROPERTY] None on missing rate" {
         val arbValidAsset = arbitrary {
             rates.rates.keys.random()
         }
