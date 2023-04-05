@@ -3,7 +3,30 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import ivy.core.data.primitives.Percent.Companion.fromFloat
 
+/**
+ * Represents a percentage as a float value in the range [[0, 100]].
+ * This class provides type-safe operations on percentage values and ensures that only valid percentages are used.
+ * To create a valid `Percent` object, use [fromFloat] method.
+ *
+ * # Example
+ * ```
+ * val a = Percent(50f)
+ * val b = Percent(25f)
+ *
+ * // Use the comparison operators
+ * println(a > b) // true
+ *
+ * // Use fromFloat method to create valid Percent objects
+ * val validPercent = Percent.fromFloat(101f) // This would return None
+ * ```
+ *
+ * @property value The percentage value as a float.
+ *
+ * # Note
+ * It is recommended to use [fromFloat] method to create `Percent` objects, as it ensures type-safety and returns [Option<Percent>] depending on the validity of the input.
+ */
 @JvmInline
 value class Percent private constructor(val value: Float) : Comparable<Percent> {
 
