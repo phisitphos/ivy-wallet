@@ -9,7 +9,7 @@ import io.kotest.property.arbitrary.float
 import io.kotest.property.checkAll
 
 class PercentTest : FreeSpec({
-    "[PROPERTY] ∀n: ∀ valid Percent should be between 0f and 1f and finite" {
+    "[PROPERTY] ∀ Percent is between 0f and 1f and finite" {
         checkAll(Arb.float()) { float ->
             val percent = Percent.fromFloat(float)
 

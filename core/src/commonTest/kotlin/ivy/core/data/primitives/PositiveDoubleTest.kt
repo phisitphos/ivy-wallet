@@ -12,7 +12,7 @@ import io.kotest.property.checkAll
 import ivy.core.util.positive
 
 class PositiveDoubleTest : FreeSpec({
-    "[PROPERTY] ∀n: ∀ valid PositiveDouble is positive and finite" {
+    "[PROPERTY] ∀ PositiveDouble is positive and finite" {
         checkAll(Arb.double()) { double ->
             val res = PositiveDouble.fromDouble(double)
 

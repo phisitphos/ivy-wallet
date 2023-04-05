@@ -9,7 +9,7 @@ import io.kotest.property.arbitrary.double
 import io.kotest.property.checkAll
 
 class NonNegativeDoubleTest : FreeSpec({
-    "[PROPERTY] ∀n: ∀ valid NonNegativeDouble is >= 0 and finite." {
+    "[PROPERTY] ∀ NonNegativeDouble is >= 0 and finite." {
         checkAll(Arb.double()) { double ->
             val res = NonNegativeDouble.fromDouble(double)
 

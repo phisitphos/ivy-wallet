@@ -33,7 +33,7 @@ class ExchangeTest : FreeSpec({
         )
     )
 
-    "[HAPPY] Valid exchanges" - {
+    "[HAPPY] Exchanges valid assets (see cases)" - {
         with(rates) {
             withData(
                 nameFn = { (from, to) ->

@@ -8,7 +8,7 @@ import io.kotest.property.arbitrary.int
 import io.kotest.property.checkAll
 
 class PositiveIntTest : FreeSpec({
-    "[PROPERTY] ∀n: ∀ valid PositiveInt is positive" {
+    "[PROPERTY] ∀ PositiveInt is positive" {
         checkAll(Arb.int()) { int ->
             val res = PositiveInt.fromInt(int)
 

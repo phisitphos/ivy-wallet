@@ -9,7 +9,7 @@ import io.kotest.property.arbitrary.string
 import io.kotest.property.checkAll
 
 class NotBlankTrimmerStringTest : FreeSpec({
-    "[PROPERTY] ∀NotBlankTrimmedString is not blank and trimmed" {
+    "[PROPERTY] ∀ NotBlankTrimmedString is not blank and trimmed" {
         checkAll(Arb.string()) { string ->
             val res = NotBlankTrimmedString.fromString(string)
 
