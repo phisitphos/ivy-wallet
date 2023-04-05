@@ -3,7 +3,29 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import ivy.core.data.primitives.PositiveDouble.Companion.fromDouble
 
+/**
+ * Represents a positive double value greater than 0 and finite.
+ *
+ * This class provides type-safe operations on positive double values, ensuring that the results are also positive.
+ * Supported operations include addition, subtraction, multiplication, division, and modulo. Some operations return an [Option] of [PositiveDouble].
+ *
+ * Use [fromDouble] to create instances safely. If the provided value is not positive or not finite, it returns `None`.
+ *
+ * Example usage:
+ * ```
+ * val a = PositiveDouble(1.5)
+ * val b = PositiveDouble(2.5)
+ * val result = a + b // result is PositiveDouble(4.0)
+ *
+ * val invalid = PositiveDouble.fromDouble(-1.0) // returns None, as the value is not positive
+ * val zero = PositiveDouble.fromDouble(0.0) // returns None, as the value is not greater than 0
+ * val infinity = PositiveDouble.fromDouble(Double.POSITIVE_INFINITY) // returns None, as the value is not finite
+ * ```
+ *
+ * @property value The underlying positive, finite double value.
+ */
 @JvmInline
 value class PositiveDouble private constructor(val value: Double) {
 

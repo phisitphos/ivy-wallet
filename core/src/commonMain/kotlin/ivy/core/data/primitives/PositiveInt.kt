@@ -3,7 +3,28 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import ivy.core.data.primitives.PositiveInt.Companion.fromInt
 
+/**
+ * Represents a positive integer value greater than 0.
+ *
+ * This class provides type-safe operations on positive integer values, ensuring that the results are also positive.
+ * Supported operations include addition, subtraction, multiplication, division, and modulo. Some operations return an [Option] of [PositiveInt].
+ *
+ * Use [fromInt] to create instances safely. If the provided value is not positive, it returns `None`.
+ *
+ * Example usage:
+ * ```
+ * val a = PositiveInt(1)
+ * val b = PositiveInt(2)
+ * val result = a + b // result is PositiveInt(3)
+ *
+ * val invalid = PositiveInt.fromInt(-1) // returns None, as the value is not positive
+ * val zero = PositiveInt.fromInt(0) // returns None, as the value is not greater than 0
+ * ```
+ *
+ * @property value The underlying positive integer value.
+ */
 @JvmInline
 value class PositiveInt private constructor(val value: Int) {
 

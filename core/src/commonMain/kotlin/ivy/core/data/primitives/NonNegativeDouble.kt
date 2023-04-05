@@ -3,7 +3,28 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import ivy.core.data.primitives.NonNegativeDouble.Companion.fromDouble
 
+/**
+ * Represents a non-negative, finite double value.
+ *
+ * This class provides type-safe operations on non-negative double values, ensuring that the results are also non-negative and finite.
+ * Supported operations include addition, subtraction, multiplication, division, and modulo. All operations return an [Option] of [NonNegativeDouble].
+ *
+ * Use [fromDouble] to create instances safely. If the provided value is negative, NaN, or infinity, it returns `None`.
+ *
+ * Example usage:
+ * ```
+ * val a = NonNegativeDouble(3.0)
+ * val b = NonNegativeDouble(2.0)
+ * val result = a + b // result is Some(NonNegativeDouble(5.0))
+ *
+ * val invalid = NonNegativeDouble.fromDouble(-1.0) // returns None, as the value is negative
+ * val invalidInfinity = NonNegativeDouble.fromDouble(Double.POSITIVE_INFINITY) // returns None, as the value is infinite
+ * ```
+ *
+ * @property value The underlying non-negative, finite double value.
+ */
 @JvmInline
 value class NonNegativeDouble private constructor(val value: Double) {
 

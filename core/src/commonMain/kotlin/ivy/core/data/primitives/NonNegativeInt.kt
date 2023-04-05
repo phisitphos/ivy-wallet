@@ -3,7 +3,27 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import ivy.core.data.primitives.NonNegativeInt.Companion.fromInt
 
+/**
+ * Represents a non-negative integer value.
+ *
+ * This class provides type-safe operations on non-negative integer values, ensuring that the results are also non-negative.
+ * Supported operations include addition, subtraction, multiplication, division, and modulo. Some operations return an [Option] of [NonNegativeInt].
+ *
+ * Use [fromInt] to create instances safely. If the provided value is negative, it returns `None`.
+ *
+ * Example usage:
+ * ```
+ * val a = NonNegativeInt(3)
+ * val b = NonNegativeInt(2)
+ * val result = a + b // result is NonNegativeInt(5)
+ *
+ * val invalid = NonNegativeInt.fromInt(-1) // returns None, as the value is negative
+ * ```
+ *
+ * @property value The underlying non-negative integer value.
+ */
 @JvmInline
 value class NonNegativeInt private constructor(val value: Int) {
 
