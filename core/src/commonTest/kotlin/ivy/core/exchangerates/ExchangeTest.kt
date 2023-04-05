@@ -130,7 +130,7 @@ class ExchangeTest : FreeSpec({
         }
     }
 
-    "[PROPERTY] Exchange with a missing rate fails" {
+    "[PROPERTY] Failure on missing rate" {
         val arbValidAsset = arbitrary {
             rates.rates.keys.random()
         }
@@ -138,12 +138,12 @@ class ExchangeTest : FreeSpec({
         val arbInput = arbitrary {
             when (Arb.int(1..3).bind()) {
                 1 -> {
-                    // from valid, to invalid
+                    // from valid to invalid
                     arbValidAsset.bind() to Arb.assetCode().bind()
                 }
 
                 2 -> {
-                    // from invalid, to valid
+                    // from invalid to valid
                     Arb.assetCode().bind() to arbValidAsset.bind()
                 }
 
@@ -169,7 +169,7 @@ class ExchangeTest : FreeSpec({
         }
     }
 
-    "[EDGE CASE] Disappearing rate ~= 0" {
+    "[EDGE] Disappearing rate ~= 0" {
         // Arrange
         val smallRates = exchangeRates(
             base = "BGN",
