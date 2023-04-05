@@ -27,7 +27,7 @@ import ivy.core.data.primitives.PositiveDouble.Companion.fromDouble
  * @property value The underlying positive, finite double value.
  */
 @JvmInline
-value class PositiveDouble private constructor(val value: Double) {
+value class PositiveDouble private constructor(val value: Double) : Comparable<PositiveDouble> {
 
     operator fun plus(other: PositiveDouble): Option<PositiveDouble> =
         fromDouble(value + other.value)
@@ -43,6 +43,8 @@ value class PositiveDouble private constructor(val value: Double) {
 
     operator fun rem(other: PositiveDouble): Option<PositiveDouble> =
         if (other.value != 0.0) fromDouble(value % other.value) else None
+
+    override fun compareTo(other: PositiveDouble): Int = value.compareTo(other.value)
 
     override fun toString(): String = value.toString()
 

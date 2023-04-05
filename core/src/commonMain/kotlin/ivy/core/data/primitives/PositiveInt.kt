@@ -26,7 +26,7 @@ import ivy.core.data.primitives.PositiveInt.Companion.fromInt
  * @property value The underlying positive integer value.
  */
 @JvmInline
-value class PositiveInt private constructor(val value: Int) {
+value class PositiveInt private constructor(val value: Int) : Comparable<PositiveInt> {
 
     operator fun plus(other: PositiveInt): PositiveInt =
         unsafe(value + other.value)
@@ -42,6 +42,8 @@ value class PositiveInt private constructor(val value: Int) {
 
     operator fun rem(other: PositiveInt): Option<PositiveInt> =
         if (other.value != 0) fromInt(value % other.value) else None
+
+    override fun compareTo(other: PositiveInt): Int = value.compareTo(other.value)
 
     override fun toString(): String = value.toString()
 

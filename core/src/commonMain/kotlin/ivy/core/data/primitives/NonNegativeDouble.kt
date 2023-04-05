@@ -26,7 +26,7 @@ import ivy.core.data.primitives.NonNegativeDouble.Companion.fromDouble
  * @property value The underlying non-negative, finite double value.
  */
 @JvmInline
-value class NonNegativeDouble private constructor(val value: Double) {
+value class NonNegativeDouble private constructor(val value: Double) : Comparable<NonNegativeDouble> {
 
     operator fun plus(other: NonNegativeDouble): Option<NonNegativeDouble> =
         fromDouble(value + other.value)
@@ -42,6 +42,8 @@ value class NonNegativeDouble private constructor(val value: Double) {
 
     operator fun rem(other: NonNegativeDouble): Option<NonNegativeDouble> =
         if (other.value != 0.0) fromDouble(value % other.value) else None
+
+    override fun compareTo(other: NonNegativeDouble): Int = value.compareTo(other.value)
 
     override fun toString(): String = value.toString()
 

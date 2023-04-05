@@ -5,7 +5,7 @@ import arrow.core.Option
 import arrow.core.Some
 
 @JvmInline
-value class Percent private constructor(val value: Float) {
+value class Percent private constructor(val value: Float) : Comparable<Percent> {
 
     operator fun plus(other: Percent): Option<Percent> =
         fromFloat(value + other.value)
@@ -18,6 +18,8 @@ value class Percent private constructor(val value: Float) {
 
     operator fun div(factor: Float): Option<Percent> =
         if (factor != 0f) fromFloat(value / factor) else None
+
+    override fun compareTo(other: Percent): Int = value.compareTo(other.value)
 
     override fun toString(): String = "$value%"
 

@@ -25,7 +25,7 @@ import ivy.core.data.primitives.NonNegativeInt.Companion.fromInt
  * @property value The underlying non-negative integer value.
  */
 @JvmInline
-value class NonNegativeInt private constructor(val value: Int) {
+value class NonNegativeInt private constructor(val value: Int) : Comparable<NonNegativeInt> {
 
     operator fun plus(other: NonNegativeInt): NonNegativeInt =
         unsafe(value + other.value)
@@ -41,6 +41,8 @@ value class NonNegativeInt private constructor(val value: Int) {
 
     operator fun rem(other: NonNegativeInt): Option<NonNegativeInt> =
         if (other.value != 0) fromInt(value % other.value) else None
+
+    override fun compareTo(other: NonNegativeInt): Int = value.compareTo(other.value)
 
     override fun toString(): String = value.toString()
 
