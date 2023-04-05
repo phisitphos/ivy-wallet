@@ -1,3 +1,5 @@
+package ivy.core
+
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
@@ -13,13 +15,13 @@ data class Task(
     val title: String,
     val description: String?,
     val orderNum: Double,
-    val info: TaskInfo,
+    val info: TaskInfo
 )
 
 @Serializable
 data class TaskInfo(
     val creator: String,
-    val priority: Int,
+    val priority: Int
 )
 
 class KotlinXSerializationTest : FreeSpec({
@@ -32,8 +34,8 @@ class KotlinXSerializationTest : FreeSpec({
             orderNum = 1.0,
             info = TaskInfo(
                 creator = "creator",
-                priority = 1,
-            ),
+                priority = 1
+            )
         )
         val json = Json.encodeToString(Task.serializer(), task)
         json shouldBe """{"id":"1","completed":true,"title":"title","description":"description","orderNum":1.0,"info":{"creator":"creator","priority":1}}"""
@@ -51,8 +53,8 @@ class KotlinXSerializationTest : FreeSpec({
             orderNum = 1.0,
             info = TaskInfo(
                 creator = "creator",
-                priority = 1,
-            ),
+                priority = 1
+            )
         )
     }
 
@@ -66,8 +68,8 @@ class KotlinXSerializationTest : FreeSpec({
                 orderNum = Arb.double(-1_000.0..1_000.0).removeEdgecases().bind(),
                 info = TaskInfo(
                     creator = Arb.string().bind(),
-                    priority = Arb.int(1..100).removeEdgecases().bind(),
-                ),
+                    priority = Arb.int(1..100).removeEdgecases().bind()
+                )
             )
         }
 

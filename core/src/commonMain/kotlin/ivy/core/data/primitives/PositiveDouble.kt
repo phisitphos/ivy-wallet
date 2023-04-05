@@ -26,7 +26,7 @@ value class PositiveDouble private constructor(val value: Double) {
 
     companion object {
         fun fromDouble(value: Double): Option<PositiveDouble> =
-            if (value > 0.0) Some(PositiveDouble(value)) else None
+            if (value > 0.0 && value.isFinite()) Some(PositiveDouble(value)) else None
 
         fun unsafe(value: Double): PositiveDouble = fromDouble(value).fold(
             ifEmpty = { throw IllegalArgumentException("Value must be positive") },

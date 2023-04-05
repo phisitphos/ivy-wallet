@@ -26,7 +26,7 @@ value class NonNegativeDouble private constructor(val value: Double) {
 
     companion object {
         fun fromDouble(value: Double): Option<NonNegativeDouble> =
-            if (value >= 0.0) Some(NonNegativeDouble(value)) else None
+            if (value >= 0.0 && value.isFinite()) Some(NonNegativeDouble(value)) else None
 
         fun unsafe(value: Double): NonNegativeDouble = fromDouble(value).fold(
             ifEmpty = { throw IllegalArgumentException("Value must be non-negative") },
