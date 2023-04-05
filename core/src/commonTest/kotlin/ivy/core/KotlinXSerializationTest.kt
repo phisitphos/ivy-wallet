@@ -25,7 +25,7 @@ data class TaskInfo(
 )
 
 class KotlinXSerializationTest : FreeSpec({
-    "serialize" {
+    "[HAPPY] Serialize" {
         val task = Task(
             id = "1",
             completed = true,
@@ -41,7 +41,7 @@ class KotlinXSerializationTest : FreeSpec({
         json shouldBe """{"id":"1","completed":true,"title":"title","description":"description","orderNum":1.0,"info":{"creator":"creator","priority":1}}"""
     }
 
-    "deserialize" {
+    "[HAPPY] Deserialize" {
         val json =
             """{"id":"1","completed":true,"title":"title","description":"description","orderNum":1.0,"info":{"creator":"creator","priority":1}}"""
         val task = Json.decodeFromString(Task.serializer(), json)
@@ -58,7 +58,7 @@ class KotlinXSerializationTest : FreeSpec({
         )
     }
 
-    "invariant: serialize <=> deserialize" {
+    "[PROPERTY] Serialize <=> deserialize" {
         val arbTask = arbitrary {
             Task(
                 id = Arb.string().bind(),

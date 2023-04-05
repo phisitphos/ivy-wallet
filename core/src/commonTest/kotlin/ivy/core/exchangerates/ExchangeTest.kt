@@ -1,12 +1,12 @@
 package ivy.core.exchangerates
 
 import arrow.core.None
-import arrow.core.Some
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.data.row
 import io.kotest.datatest.withData
 import io.kotest.matchers.doubles.shouldBeGreaterThan
+import io.kotest.matchers.doubles.shouldBeGreaterThanOrEqual
 import io.kotest.matchers.doubles.shouldBeLessThan
 import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
@@ -81,7 +81,7 @@ class ExchangeTest : FreeSpec({
         checkAll(
             arbValidAsset,
             arbValidAsset,
-            Arb.nonNegativeDouble()
+            Arb.nonNegativeDouble(max = 1_000_000_000.0)
         ) { asset1, asset2, original ->
             with(rates) {
                 val exchanged = exchange(
@@ -90,32 +90,30 @@ class ExchangeTest : FreeSpec({
                     to = asset2
                 )
                 assume(exchanged.isSome())
+                exchanged.shouldBeSome()
+
                 val reversed = exchange(
-                    amount = (exchanged as Some).value,
+                    amount = exchanged.value,
                     from = asset2,
                     to = asset1
                 )
-                reversed.isSome()
 
-                // Use a tolerance value to account for potential rounding errors
-                val tolerance = 10.0
-                abs(
-                    original.value - (reversed as Some).value.value
-                ) shouldBeLessThan tolerance
+                reversed.shouldBeSome()
+                abs(original.value - reversed.value.value) shouldBeLessThan 100.0
+                original.value.round() shouldBe reversed.value.value.round()
             }
         }
     }
 
     "[PROPERTY] Non-negative result" {
         checkAll(
-            Arb.positiveDouble(),
-            Arb.positiveDouble(),
-            Arb.nonNegativeDouble()
+            Arb.positiveDouble(max = 1_000_000_000.0),
+            Arb.positiveDouble(max = 1_000_000_000.0),
+            Arb.nonNegativeDouble(max = 1_000_000_000.0)
         ) { rate1, rate2, amount ->
             val newRates = ExchangeRates(
                 base = assetCode("base"),
                 rates = mapOf(
-                    assetCode("base") to positive(1.0),
                     assetCode("2") to rate1,
                     assetCode("3") to rate2
                 )
@@ -128,7 +126,7 @@ class ExchangeTest : FreeSpec({
             )
 
             res.shouldBeSome()
-            res.value.value shouldBeGreaterThan 0.0
+            res.value.value shouldBeGreaterThanOrEqual 0.0
         }
     }
 
@@ -189,9 +187,8 @@ class ExchangeTest : FreeSpec({
         )
 
         // Assert
-        println(res)
-        res.isSome() shouldBe true
-        val exchanged = (res as Some).value.value
+        res.shouldBeSome()
+        val exchanged = res.value.value
         exchanged shouldBeLessThan 1.0
         exchanged shouldBeGreaterThan 0.0
         exchanged.round() shouldBe "0.00"

@@ -7,14 +7,14 @@ import arrow.core.Some
 @JvmInline
 value class NonNegativeDouble private constructor(val value: Double) {
 
-    operator fun plus(other: NonNegativeDouble): NonNegativeDouble =
-        unsafe(value + other.value)
+    operator fun plus(other: NonNegativeDouble): Option<NonNegativeDouble> =
+        fromDouble(value + other.value)
 
     operator fun minus(other: NonNegativeDouble): Option<NonNegativeDouble> =
         fromDouble(value - other.value)
 
-    operator fun times(other: NonNegativeDouble): NonNegativeDouble =
-        unsafe(value * other.value)
+    operator fun times(other: NonNegativeDouble): Option<NonNegativeDouble> =
+        fromDouble(value * other.value)
 
     operator fun div(other: NonNegativeDouble): Option<NonNegativeDouble> =
         if (other.value != 0.0) fromDouble(value / other.value) else None
@@ -29,7 +29,7 @@ value class NonNegativeDouble private constructor(val value: Double) {
             if (value >= 0.0 && value.isFinite()) Some(NonNegativeDouble(value)) else None
 
         fun unsafe(value: Double): NonNegativeDouble = fromDouble(value).fold(
-            ifEmpty = { throw IllegalArgumentException("Value must be non-negative") },
+            ifEmpty = { throw IllegalArgumentException("Value must be non-negative and finite.") },
             ifSome = { it }
         )
 
