@@ -6,7 +6,7 @@ import ivy.core.data.AssetCode
 import ivy.core.data.primitives.*
 
 fun Arb.Companion.assetCode(): Arb<AssetCode> = arbitrary {
-    AssetCode(Arb.notBlankTrimmedString().bind())
+    AssetCode(Arb.notBlankTrimmedString().bind().value)
 }
 
 fun Arb.Companion.notBlankTrimmedString(): Arb<NotBlankTrimmedString> = arbitrary {

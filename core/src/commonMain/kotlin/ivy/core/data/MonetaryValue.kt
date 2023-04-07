@@ -1,14 +1,6 @@
 package ivy.core.data
 
-import ivy.core.data.primitives.NotBlankTrimmedString
 import ivy.core.data.primitives.PositiveDouble
-
-/**
- * Represents an asset code for an account.
- * @property code The non-blank trimmed string value for the asset code.
- */
-@JvmInline
-value class AssetCode(val code: NotBlankTrimmedString)
 
 /**
  * A class representing a monetary or asset value with a specific amount and an associated asset code.

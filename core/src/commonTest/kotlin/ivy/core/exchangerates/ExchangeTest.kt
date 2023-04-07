@@ -17,7 +17,6 @@ import io.kotest.property.assume
 import io.kotest.property.checkAll
 import ivy.core.data.AssetCode
 import ivy.core.data.primitives.NonNegativeDouble
-import ivy.core.data.primitives.NotBlankTrimmedString
 import ivy.core.exchangerates.data.ExchangeRates
 import ivy.core.util.*
 
@@ -61,8 +60,8 @@ class ExchangeTest : FreeSpec({
             ) { (from, to) ->
                 val res = exchange(
                     amount = NonNegativeDouble(from.first),
-                    from = AssetCode(NotBlankTrimmedString(from.second)),
-                    to = AssetCode(NotBlankTrimmedString(to.second))
+                    from = AssetCode(from.second),
+                    to = AssetCode(to.second)
                 )
 
                 res.map { it.value.round() } shouldBeSome to.first.round()
