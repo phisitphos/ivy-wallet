@@ -1,6 +1,6 @@
 package ivy.core.exchangerates
 
-import arrow.core.None
+import io.kotest.assertions.arrow.core.shouldBeNone
 import io.kotest.assertions.arrow.core.shouldBeSome
 import io.kotest.core.spec.style.FreeSpec
 import io.kotest.data.row
@@ -13,7 +13,6 @@ import io.kotest.property.Arb
 import io.kotest.property.arbitrary.arbitrary
 import io.kotest.property.arbitrary.filter
 import io.kotest.property.arbitrary.int
-import io.kotest.property.arbitrary.positiveInt
 import io.kotest.property.assume
 import io.kotest.property.checkAll
 import ivy.core.data.AssetCode
@@ -109,6 +108,7 @@ class ExchangeTest : FreeSpec({
             Arb.positiveDouble(max = 1_000_000_000.0),
             Arb.nonNegativeDouble(max = 1_000_000_000.0)
         ) { rate1, rate2, amount ->
+            // Given
             val newRates = ExchangeRates(
                 base = assetCode("base"),
                 rates = mapOf(
@@ -117,12 +117,16 @@ class ExchangeTest : FreeSpec({
                 )
             )
 
-            val res = newRates.exchange(
-                amount = amount,
-                from = assetCode("2"),
-                to = assetCode("3")
-            )
+            // When
+            val res = with(newRates) {
+                exchange(
+                    amount = amount,
+                    from = assetCode("2"),
+                    to = assetCode("3")
+                )
+            }
 
+            // Then
             res.shouldBeSome()
             res.value.value shouldBeGreaterThanOrEqual 0.0
         }
@@ -155,20 +159,22 @@ class ExchangeTest : FreeSpec({
         // PROPERTY: Missing exchange rates returns None
         checkAll(
             arbInput.filter { it.first != it.second },
-            Arb.positiveInt()
+            Arb.nonNegativeDouble(min = 10.0)
         ) { (from, to), amount ->
-            with(rates) {
+            val res = with(rates) {
                 exchange(
                     from = from,
                     to = to,
-                    amount = NonNegativeDouble(amount.toDouble())
-                ) shouldBe None
+                    amount = amount
+                )
             }
+
+            res.shouldBeNone()
         }
     }
 
     "[EDGE] Disappearing rate ~= 0" {
-        // Arrange
+        // Given
         val smallRates = exchangeRates(
             base = "BGN",
             rates = mapOf(
@@ -177,14 +183,16 @@ class ExchangeTest : FreeSpec({
             )
         )
 
-        // Act
-        val res = smallRates.exchange(
-            amount = NonNegativeDouble(1.0),
-            from = assetCode("x"),
-            to = assetCode("y")
-        )
+        // When
+        val res = with(smallRates) {
+            exchange(
+                amount = NonNegativeDouble(1.0),
+                from = assetCode("x"),
+                to = assetCode("y")
+            )
+        }
 
-        // Assert
+        // Then
         res.shouldBeSome()
         val exchanged = res.value.value
         exchanged shouldBeLessThan 1.0

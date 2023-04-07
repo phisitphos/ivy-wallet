@@ -16,7 +16,8 @@ import ivy.core.exchangerates.data.ExchangeRates
  * @param to The asset code of the asset to exchange to.
  * @return An [Option] containing the exchanged amount as a [NonNegativeDouble] if the exchange is successful, or None otherwise.
  */
-fun ExchangeRates.exchange(
+context(ExchangeRates)
+fun exchange(
     amount: NonNegativeDouble,
     from: AssetCode,
     to: AssetCode

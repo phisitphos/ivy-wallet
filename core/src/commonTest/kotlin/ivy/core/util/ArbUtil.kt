@@ -20,8 +20,11 @@ fun Arb.Companion.positiveInt(max: Int = Int.MAX_VALUE): Arb<PositiveInt> =
     Arb.int(min = 1, max = max)
         .map(PositiveInt::unsafe)
 
-fun Arb.Companion.nonNegativeDouble(max: Double = Double.MAX_VALUE): Arb<NonNegativeDouble> =
-    Arb.double(min = 0.0, max = max)
+fun Arb.Companion.nonNegativeDouble(
+    min: Double = 0.0,
+    max: Double = Double.MAX_VALUE
+): Arb<NonNegativeDouble> =
+    Arb.double(min = min, max = max)
         .filter { it.isFinite() }
         .map(NonNegativeDouble::unsafe)
 
