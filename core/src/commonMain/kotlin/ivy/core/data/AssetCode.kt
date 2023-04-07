@@ -1,8 +1,6 @@
 package ivy.core.data
 
-import arrow.core.None
 import arrow.core.Option
-import arrow.core.Some
 import ivy.core.data.AssetCode.Companion.fromString
 import ivy.core.data.primitives.NotBlankTrimmedString
 
@@ -35,14 +33,12 @@ value class AssetCode private constructor(val code: NotBlankTrimmedString) {
     override fun toString(): String = code.toString()
 
     companion object {
-        fun fromString(value: String): Option<AssetCode> {
-            val trimmedValue = value.trim()
-            return if (trimmedValue.isNotBlank()) {
-                Some(AssetCode(NotBlankTrimmedString(trimmedValue.uppercase())))
-            } else {
-                None
+        fun fromString(value: String): Option<AssetCode> =
+            NotBlankTrimmedString.fromString(value).map {
+                AssetCode(
+                    code = NotBlankTrimmedString.unsafe(it.value.uppercase())
+                )
             }
-        }
 
         fun unsafe(value: String): AssetCode = fromString(value).fold(
             ifEmpty = { throw IllegalArgumentException("Value must be non-blank and trimmed") },
