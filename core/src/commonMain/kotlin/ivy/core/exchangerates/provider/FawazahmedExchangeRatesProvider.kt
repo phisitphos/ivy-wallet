@@ -1,14 +1,19 @@
 package ivy.core.exchangerates.provider
 
-import arrow.core.None
-import arrow.core.Option
-import arrow.core.Some
+import arrow.core.Either
+import arrow.core.Either.Left
+import arrow.core.Either.Right
+import arrow.core.flatMap
+import arrow.core.getOrElse
 import arrow.core.raise.Raise
 import arrow.core.raise.catch
+import arrow.core.raise.option
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
 import io.ktor.http.*
+import ivy.core.data.AssetCode
+import ivy.core.data.primitives.PositiveDouble
 import ivy.core.exchangerates.ExchangeProviderError
 import ivy.core.exchangerates.ExchangeRatesProvider
 import ivy.core.exchangerates.data.ExchangeRates
@@ -22,7 +27,7 @@ import kotlinx.serialization.Serializable
  */
 class FawazahmedExchangeRatesProvider : ExchangeRatesProvider {
     companion object {
-        private val URLS = listOf(
+        private val URLS = setOf(
             "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.json",
             "https://cdn.jsdelivr.net/gh/fawazahmed0/currency-api@1/latest/currencies/eur.min.json",
             "https://raw.githubusercontent.com/fawazahmed0/currency-api/1/latest/currencies/eur.min.json",
@@ -31,37 +36,54 @@ class FawazahmedExchangeRatesProvider : ExchangeRatesProvider {
     }
 
     context(HttpClient, Raise<ExchangeProviderError>)
-    override suspend fun provideLatestRates(): ExchangeRates {
-        TODO()
+    override suspend fun provideLatestRates(): ExchangeRates =
+        fetchRatesWithFallback().map(::transformResponse)
+            .getOrElse { errMsg -> raise(ExchangeProviderError.IO(errMsg)) }
+
+    private fun transformResponse(response: FawazahmedResponse): ExchangeRates {
+        return ExchangeRates(
+            base = AssetCode("EUR"),
+            rates = response.eur.mapNotNull(::transformRateEntry).toMap()
+        )
     }
 
-    context(Raise<ExchangeProviderError>)
-    private fun transformRates(response: FawazahmedResponse): ExchangeRates {
-        TODO()
-    }
+    private fun transformRateEntry(
+        entry: Map.Entry<String, Double>
+    ): Pair<AssetCode, PositiveDouble>? = option {
+        val (rawCurrency, rawRate) = entry
+        val assetCode = AssetCode.fromString(rawCurrency).bind()
+        val rate = PositiveDouble.fromDouble(rawRate).bind()
+        assetCode to rate
+    }.getOrNull()
 
     // region fetch from the API
     context(HttpClient)
-    private suspend fun fetchRatesWithFallback(): Option<FawazahmedResponse> {
+    private suspend fun fetchRatesWithFallback(): Either<String, FawazahmedResponse> {
+        var latestFailure: Left<String> = Left("")
         URLS.forEach { url ->
-            val response = fetchRatesFrom(url).filter {
+            val response = fetchRatesFrom(url).flatMap {
                 // empty rates are considered unsuccessful
-                it.eur.isNotEmpty()
+                if (it.eur.isNotEmpty()) Right(it) else Left("Empty rates map")
             }
-            if (response is Some) return response
+            when (response) {
+                is Left -> latestFailure = response
+                is Right -> return response
+            }
         }
-        return None
+        return latestFailure
     }
 
     context(HttpClient)
-    private suspend fun fetchRatesFrom(url: String): Option<FawazahmedResponse> = catch({
+    private suspend fun fetchRatesFrom(url: String): Either<String, FawazahmedResponse> = catch({
         withContext(Dispatchers.IO) {
             val response = get(url)
-            if (!response.status.isSuccess()) error("Response code not 200")
-            response.body()
+            if (!response.status.isSuccess()) {
+                error("Unsuccessful response code - ${response.status.value}: ${response.body<String>()}")
+            }
+            Right(response.body())
         }
-    }) { _ ->
-        None
+    }) { e: Exception ->
+        Left(e.message ?: "Unknown error")
     }
 
     @Serializable

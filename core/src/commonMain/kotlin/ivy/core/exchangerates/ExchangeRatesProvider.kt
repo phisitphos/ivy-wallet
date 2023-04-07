@@ -10,5 +10,5 @@ interface ExchangeRatesProvider {
 }
 
 sealed interface ExchangeProviderError {
-    object IO : ExchangeProviderError
+    data class IO(val errMsg: String) : ExchangeProviderError
 }
