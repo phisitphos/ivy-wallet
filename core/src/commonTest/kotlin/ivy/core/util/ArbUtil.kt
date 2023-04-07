@@ -13,11 +13,17 @@ fun Arb.Companion.notBlankTrimmedString(): Arb<NotBlankTrimmedString> = arbitrar
     NotBlankTrimmedString(Arb.string().filter { it.isNotBlank() }.bind())
 }
 
-fun Arb.Companion.nonNegativeInt(max: Int = Int.MAX_VALUE): Arb<NonNegativeInt> =
-    Arb.int(min = 0, max = max).map(NonNegativeInt::unsafe)
+fun Arb.Companion.nonNegativeInt(
+    min: Int = 0,
+    max: Int = Int.MAX_VALUE
+): Arb<NonNegativeInt> =
+    Arb.int(min = min, max = max).map(NonNegativeInt::unsafe)
 
-fun Arb.Companion.positiveInt(max: Int = Int.MAX_VALUE): Arb<PositiveInt> =
-    Arb.int(min = 1, max = max)
+fun Arb.Companion.positiveInt(
+    min: Int = 1,
+    max: Int = Int.MAX_VALUE
+): Arb<PositiveInt> =
+    Arb.int(min = min, max = max)
         .map(PositiveInt::unsafe)
 
 fun Arb.Companion.nonNegativeDouble(
@@ -28,7 +34,10 @@ fun Arb.Companion.nonNegativeDouble(
         .filter { it.isFinite() }
         .map(NonNegativeDouble::unsafe)
 
-fun Arb.Companion.positiveDouble(max: Double = Double.MAX_VALUE): Arb<PositiveDouble> =
-    Arb.double(min = 0.000000000000000000000001, max = max)
+fun Arb.Companion.positiveDouble(
+    min: Double = 0.000000000000000000000001,
+    max: Double = Double.MAX_VALUE
+): Arb<PositiveDouble> =
+    Arb.double(min = min, max = max)
         .filter { it.isFinite() }
         .map(PositiveDouble::unsafe)
