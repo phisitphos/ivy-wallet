@@ -5,9 +5,7 @@ import arrow.core.Either.Left
 import arrow.core.Either.Right
 import arrow.core.flatMap
 import arrow.core.getOrElse
-import arrow.core.raise.Raise
-import arrow.core.raise.catch
-import arrow.core.raise.option
+import arrow.core.raise.*
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.request.*
@@ -74,16 +72,16 @@ class FawazahmedExchangeRatesProvider : ExchangeRatesProvider {
     }
 
     context(HttpClient)
-    private suspend fun fetchRatesFrom(url: String): Either<String, FawazahmedResponse> = catch({
+    private suspend fun fetchRatesFrom(url: String): Either<String, FawazahmedResponse> = either {
         withContext(Dispatchers.IO) {
-            val response = get(url)
-            if (!response.status.isSuccess()) {
-                error("Unsuccessful response code - ${response.status.value}: ${response.body<String>()}")
+            val response = catch({ get(url) }) { e: Exception ->
+                raise(e.message ?: "Unknown error")
             }
-            Right(response.body())
+            ensure(response.status.isSuccess()) {
+                "Unsuccessful response code - ${response.status.value}: ${response.body<String>()}"
+            }
+            response.body()
         }
-    }) { e: Exception ->
-        Left(e.message ?: "Unknown error")
     }
 
     @Serializable
