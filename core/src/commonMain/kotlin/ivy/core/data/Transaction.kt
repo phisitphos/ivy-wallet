@@ -39,6 +39,9 @@ sealed interface Transaction : Syncable<TransactionId> {
     /** Time at which the transaction occurred. */
     val time: Instant
 
+    /** Indicates if the transaction is settled. */
+    val settled: Boolean
+
     /** Identifier of the associated category, if any. */
     val categoryId: CategoryId?
 
@@ -57,8 +60,8 @@ sealed interface Transaction : Syncable<TransactionId> {
     /** Identifier of the associated recurrence pattern, if any. */
     val recurrenceId: RecurrenceId?
 
-    /** Indicates if the transaction is settled. */
-    val settled: Boolean
+    /** Transaction fee, if any. **/
+    val fee: TransactionFee?
 
     /** Indicates if the transaction is hidden. */
     val hidden: Boolean
@@ -79,6 +82,7 @@ data class Income(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
+    override val fee: TransactionFee?,
     override val hidden: Boolean,
 
     // Metadata
@@ -101,6 +105,7 @@ data class Expense(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
+    override val fee: TransactionFee?,
     override val hidden: Boolean,
 
     // Metadata
@@ -114,11 +119,10 @@ data class Expense(
 data class Transfer(
     override val id: TransactionId,
     override val accountId: AccountId,
-    val destinationAccountId: AccountId,
     override val value: MonetaryValue,
+    val destinationAccountId: AccountId,
     val destinationValue: MonetaryValue,
     override val time: Instant,
-    val fee: MonetaryValue?,
     override val categoryId: CategoryId?,
     override val title: NotBlankTrimmedString,
     override val description: NotBlankTrimmedString?,
@@ -126,9 +130,15 @@ data class Transfer(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
+    override val fee: TransactionFee?,
     override val hidden: Boolean,
 
     // Metadata
     override val deleted: Boolean,
     override val lastUpdated: Instant
 ) : Transaction
+
+data class TransactionFee(
+    val value: MonetaryValue,
+    val accountId: AccountId
+)
