@@ -31,8 +31,7 @@ private data class FinancialDataState(
  */
 fun foldTransactions(
     transactions: List<TransactionCalcData>,
-    interpretTransfer: (TransactionCalcData.Transfer) -> List<FinancialValue>,
-    interpretTransferFee: (TransactionFee.Transfer) -> FinancialValue?
+    interpretTransfer: (TransactionCalcData.Transfer) -> List<FinancialValue>
 ): FinancialData {
     val state = FinancialDataState()
 
@@ -46,7 +45,19 @@ fun foldTransactions(
                     .forEach { processFinancialValue(it) }
             }
 
-            processTransactionFee(trn.fee, interpretTransferFee)
+            when (val fee = trn.fee) {
+                is TransactionFee.OneSided -> processFinancialValue(
+                    // every fee is expense
+                    FinancialValue(
+                        type = FinancialValueType.Expense,
+                        value = fee.value
+                    )
+                )
+
+                is TransactionFee.Transfer, null -> {
+                    // transfer fees is processed in interpretTransfer
+                }
+            }
 
             // update newest transaction time
             if (trn.time > newestTransactionTime) {
@@ -66,26 +77,6 @@ fun foldTransactions(
         expensesCount = NonNegativeInt(state.expensesCount),
         newestTransactionTime = state.newestTransactionTime
     )
-}
-
-context(FinancialDataState)
-private fun processTransactionFee(
-    fee: TransactionFee?,
-    interpretTransferFee: (TransactionFee.Transfer) -> FinancialValue?
-) {
-    when (fee) {
-        is TransactionFee.OneSided -> processFinancialValue(
-            FinancialValue(
-                type = FinancialValueType.Expense, // every fee is expense
-                value = fee.value
-            )
-        )
-
-        is TransactionFee.Transfer -> interpretTransferFee(fee)
-            ?.let { processFinancialValue(it) }
-
-        null -> {}
-    }
 }
 
 context(FinancialDataState)
