@@ -3,6 +3,7 @@ package ivy.core.data.primitives
 import arrow.core.None
 import arrow.core.Option
 import arrow.core.Some
+import arrow.core.getOrElse
 import ivy.core.data.primitives.PositiveDouble.Companion.fromDouble
 
 /**
@@ -29,14 +30,14 @@ import ivy.core.data.primitives.PositiveDouble.Companion.fromDouble
 @JvmInline
 value class PositiveDouble private constructor(val value: Double) : Comparable<PositiveDouble> {
 
-    operator fun plus(other: PositiveDouble): Option<PositiveDouble> =
-        fromDouble(value + other.value)
+    operator fun plus(other: PositiveDouble): PositiveDouble =
+        fromDouble(value + other.value).getOrElse { unsafe(Double.MAX_VALUE) }
 
     operator fun minus(other: PositiveDouble): Option<PositiveDouble> =
         fromDouble(value - other.value)
 
-    operator fun times(other: PositiveDouble): Option<PositiveDouble> =
-        fromDouble(value * other.value)
+    operator fun times(other: PositiveDouble): PositiveDouble =
+        fromDouble(value * other.value).getOrElse { unsafe(Double.MAX_VALUE) }
 
     operator fun div(other: PositiveDouble): Option<PositiveDouble> =
         if (other.value != 0.0) fromDouble(value / other.value) else None

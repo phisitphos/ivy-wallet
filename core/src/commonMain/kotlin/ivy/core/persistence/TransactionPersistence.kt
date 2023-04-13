@@ -6,6 +6,7 @@ import ivy.core.data.Transaction
 import ivy.core.domain.data.TransactionCalcData
 import ivy.core.persistence.data.PersistenceError
 import kotlinx.coroutines.flow.Flow
+import java.time.Instant
 
 interface TransactionPersistence {
     val onSaved: Flow<List<Transaction>>
@@ -33,5 +34,8 @@ interface TransactionPersistence {
 sealed interface TrnQuery
 
 sealed interface CalcTrnQuery {
-    data class ByAccount(val accountId: AccountId) : CalcTrnQuery
+    data class ByAccountAfter(
+        val accountId: AccountId,
+        val after: Instant
+    ) : CalcTrnQuery
 }
