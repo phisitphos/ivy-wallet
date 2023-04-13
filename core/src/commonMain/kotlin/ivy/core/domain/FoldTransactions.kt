@@ -18,6 +18,14 @@ data class FinancialValue(
     val value: MonetaryValue
 )
 
+private data class FinancialDataState(
+    val incomes: MutableMap<AssetCode, Double> = mutableMapOf(),
+    val expenses: MutableMap<AssetCode, Double> = mutableMapOf(),
+    var incomesCount: Int = 0,
+    var expensesCount: Int = 0,
+    var newestTransactionTime: Instant = Instant.MIN
+)
+
 /**
  * This function is optimized for performance => that's why it's ugly!
  */
@@ -26,74 +34,78 @@ fun foldTransactions(
     interpretTransfer: (TransactionCalcData.Transfer) -> List<FinancialValue>,
     interpretTransferFee: (TransactionFee.Transfer) -> FinancialValue?
 ): FinancialData {
-    val incomes = mutableMapOf<AssetCode, Double>()
-    val expenses = mutableMapOf<AssetCode, Double>()
-    var incomesCount = 0
-    var expensesCount = 0
-    var newestTrnTime = Instant.MIN
+    val state = FinancialDataState()
 
-    fun processFinancialValue(financialValue: FinancialValue) {
-        when (financialValue.type) {
-            FinancialValueType.Income -> {
-                incomes.aggregateByAsset(financialValue.value)
-                incomesCount++
+    with(state) {
+        // Main loop
+        transactions.forEach { trn ->
+            when (trn) {
+                is TransactionCalcData.OneSided.Expense -> processExpense(trn.value)
+                is TransactionCalcData.OneSided.Income -> processIncome(trn.value)
+                is TransactionCalcData.Transfer -> interpretTransfer(trn)
+                    .forEach { processFinancialValue(it) }
             }
 
-            FinancialValueType.Expense -> {
-                expenses.aggregateByAsset(financialValue.value)
-                expensesCount++
+            processTransactionFee(trn.fee, interpretTransferFee)
+
+            // update newest transaction time
+            if (trn.time > newestTransactionTime) {
+                newestTransactionTime = trn.time
             }
-        }
-    }
-
-    // Main loop
-    transactions.forEach { calcTrn ->
-        when (calcTrn) {
-            is TransactionCalcData.OneSided.Expense -> {
-                expenses.aggregateByAsset(calcTrn.value)
-                expensesCount++
-            }
-
-            is TransactionCalcData.OneSided.Income -> {
-                incomes.aggregateByAsset(calcTrn.value)
-                incomesCount++
-            }
-
-            is TransactionCalcData.Transfer -> {
-                interpretTransfer(calcTrn).forEach(::processFinancialValue)
-            }
-        }
-
-        when (val fee = calcTrn.fee) {
-            is TransactionFee.OneSided -> {
-                processFinancialValue(
-                    FinancialValue(type = FinancialValueType.Expense, fee.value)
-                )
-            }
-
-            is TransactionFee.Transfer -> {
-                interpretTransferFee(fee)?.let(::processFinancialValue)
-            }
-
-            null -> {}
-        }
-
-        if (calcTrn.time > newestTrnTime) {
-            newestTrnTime = calcTrn.time
         }
     }
 
     return FinancialData(
-        incomes = incomes.mapValues { (_, value) ->
+        incomes = state.incomes.mapValues { (_, value) ->
             PositiveDouble(value)
         },
-        expenses = expenses.mapValues { (_, value) ->
+        expenses = state.expenses.mapValues { (_, value) ->
             PositiveDouble(value)
         },
-        incomesCount = NonNegativeInt(incomesCount),
-        expensesCount = NonNegativeInt(expensesCount),
-        newestTransactionTime = newestTrnTime
+        incomesCount = NonNegativeInt(state.incomesCount),
+        expensesCount = NonNegativeInt(state.expensesCount),
+        newestTransactionTime = state.newestTransactionTime
     )
+}
+
+context(FinancialDataState)
+private fun processTransactionFee(
+    fee: TransactionFee?,
+    interpretTransferFee: (TransactionFee.Transfer) -> FinancialValue?
+) {
+    when (fee) {
+        is TransactionFee.OneSided -> processFinancialValue(
+            FinancialValue(
+                type = FinancialValueType.Expense, // every fee is expense
+                value = fee.value
+            )
+        )
+
+        is TransactionFee.Transfer -> interpretTransferFee(fee)
+            ?.let { processFinancialValue(it) }
+
+        null -> {}
+    }
+}
+
+context(FinancialDataState)
+private fun processFinancialValue(financial: FinancialValue) {
+    when (financial.type) {
+        FinancialValueType.Income -> processIncome(financial.value)
+        FinancialValueType.Expense -> processExpense(financial.value)
+    }
+}
+
+context(FinancialDataState)
+private fun processIncome(value: MonetaryValue) {
+    incomes.aggregateByAsset(value)
+    incomesCount++
+}
+
+context(FinancialDataState)
+private fun processExpense(value: MonetaryValue) {
+    expenses.aggregateByAsset(value)
+    expensesCount++
 }
 
 private fun MutableMap<AssetCode, Double>.aggregateByAsset(
