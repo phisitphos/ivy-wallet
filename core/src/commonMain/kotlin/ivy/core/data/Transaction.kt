@@ -82,7 +82,7 @@ data class Income(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
-    override val fee: TransactionFee?,
+    override val fee: TransactionFee.OneSided?,
     override val hidden: Boolean,
 
     // Metadata
@@ -105,7 +105,7 @@ data class Expense(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
-    override val fee: TransactionFee?,
+    override val fee: TransactionFee.OneSided?,
     override val hidden: Boolean,
 
     // Metadata
@@ -130,7 +130,7 @@ data class Transfer(
     override val attachments: List<AttachmentRef>,
     override val recurrenceId: RecurrenceId?,
     override val settled: Boolean,
-    override val fee: TransactionFee?,
+    override val fee: TransactionFee.Transfer?,
     override val hidden: Boolean,
 
     // Metadata
@@ -138,7 +138,13 @@ data class Transfer(
     override val lastUpdated: Instant
 ) : Transaction
 
-data class TransactionFee(
-    val value: MonetaryValue,
-    val accountId: AccountId
-)
+sealed interface TransactionFee {
+    val value: MonetaryValue
+
+    data class OneSided(override val value: MonetaryValue) : TransactionFee
+
+    data class Transfer(
+        override val value: MonetaryValue,
+        val accountId: AccountId
+    ) : TransactionFee
+}
