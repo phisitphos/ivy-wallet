@@ -1,9 +1,9 @@
-CREATE TABLE hockeyPlayer (
+CREATE TABLE IF NOT EXISTS hockeyPlayer (
   player_number INTEGER NOT NULL,
   full_name TEXT NOT NULL
 );
 
-CREATE INDEX hockeyPlayer_full_name ON hockeyPlayer(full_name);
+CREATE INDEX IF NOT EXISTS hockeyPlayer_full_name ON hockeyPlayer(full_name);
 
 selectAll:
 SELECT *
