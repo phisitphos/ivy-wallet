@@ -1,6 +1,5 @@
 package ivy.core
 
-import androidx.compose.material.Button
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import arrow.core.raise.recover
@@ -14,15 +13,6 @@ val exchangeRatesProvider: ExchangeRatesProvider = FawazahmedExchangeRatesProvid
 
 @Composable
 fun App() {
-    var text by remember { mutableStateOf("Hello, World!") }
-    val platformName = getPlatformName()
-
-    Button(onClick = {
-        text = "Hello, $platformName"
-    }) {
-        Text(text)
-    }
-
     DemoExchangeRatesFetching(exchangeRatesProvider)
 }
 

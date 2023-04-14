@@ -6,6 +6,7 @@ import arrow.core.raise.recover
 import ivy.core.data.AccountId
 import ivy.core.data.Transaction
 import ivy.core.domain.data.FinancialData
+import ivy.core.globalIOScope
 import ivy.core.persistence.AccountCachePersistence
 import ivy.core.persistence.AccountPersistence
 import ivy.core.persistence.TransactionPersistence
@@ -15,7 +16,7 @@ import ivy.core.persistence.data.PersistenceError
 import ivy.core.util.recoverDoingNothing
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 class IvyAccountCacheService(
     transactionPersistence: TransactionPersistence,
@@ -23,22 +24,25 @@ class IvyAccountCacheService(
     private val accountCachePersistence: AccountCachePersistence
 ) : AccountCacheService {
     init {
-        // TODO: "onEach" does nothing! Collect the flows!
-        transactionPersistence.onItemChange.onEach { changes ->
-            recover({
-                with(accountCachePersistence) {
-                    invalidateAffectedCaches(changes)
-                }
-            }) {
-                recoverDoingNothing {
-                    accountCachePersistence.deleteAllCaches()
+        globalIOScope.launch {
+            transactionPersistence.onItemChange.collect { changes ->
+                recover({
+                    with(accountCachePersistence) {
+                        invalidateAffectedCaches(changes)
+                    }
+                }) {
+                    recoverDoingNothing {
+                        accountCachePersistence.deleteAllCaches()
+                    }
                 }
             }
         }
 
-        accountPersistence.onDeleted.onEach { accountIds ->
-            recoverDoingNothing {
-                accountCachePersistence.deleteByIds(accountIds)
+        globalIOScope.launch {
+            accountPersistence.onDeleted.collect { accountIds ->
+                recoverDoingNothing {
+                    accountCachePersistence.deleteByIds(accountIds)
+                }
             }
         }
     }
