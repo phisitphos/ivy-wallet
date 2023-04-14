@@ -72,4 +72,8 @@ android {
             matchingFallbacks.add("release")
         }
     }
+
+    packagingOptions {
+        exclude("META-INF/versions/9/previous-compilation-data.bin")
+    }
 }

@@ -26,6 +26,8 @@ kotlin {
                 api(compose.foundation)
                 api(compose.material)
 
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Coroutines.version}")
+
                 // region ArrowKt (Functional Programming)
                 api(platform("io.arrow-kt:arrow-stack:${Deps.Arrow.version}"))
                 api("io.arrow-kt:arrow-core")
@@ -54,6 +56,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 dependsOn(commonMain)
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Deps.Coroutines.version}")
                 implementation("io.ktor:ktor-client-okhttp:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
             }
@@ -62,6 +65,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 dependsOn(commonMain)
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Deps.Coroutines.version}")
                 implementation("io.ktor:ktor-client-apache:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
             }

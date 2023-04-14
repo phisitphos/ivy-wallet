@@ -1,4 +1,9 @@
 object Deps {
+    object Coroutines {
+        //https://mvnrepository.com/artifact/org.jetbrains.kotlinx/kotlinx-coroutines-core
+        const val version = "1.7.0-Beta"
+    }
+
     object Arrow {
         //https://apidocs.arrow-kt.io/
         const val version = "1.2.0-RC"
