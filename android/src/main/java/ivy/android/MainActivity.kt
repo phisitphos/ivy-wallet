@@ -6,17 +6,23 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
 import ivy.core.App
+import ivy.core.ivyWalletDI
+import ivy.core.persistence.setup.SQLDelightDriverFactory
 import ivy.home.HomeScreen
 
 class MainActivity : AppCompatActivity() {
 
+    val sqlDriver by lazy { SQLDelightDriverFactory(applicationContext).createDriver() }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContent {
-            MaterialTheme {
-                Column {
-                    App()
-                    HomeScreen(platform = "Android")
+        ivyWalletDI(sqlDriver) {
+            setContent {
+                MaterialTheme {
+                    Column {
+                        App()
+                        HomeScreen(platform = "Android")
+                    }
                 }
             }
         }

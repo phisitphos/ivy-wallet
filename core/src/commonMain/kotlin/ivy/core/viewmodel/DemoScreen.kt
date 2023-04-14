@@ -12,6 +12,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import ivy.core.IvyWalletDI
+import ivy.core.viewModel
 
 data class DemoState(
     val counter: Int
@@ -22,6 +24,7 @@ sealed interface DemoEvent {
     object Decrement : DemoEvent
 }
 
+context(IvyWalletDI)
 class DemoViewModel : IvyViewModel<DemoState, DemoEvent>() {
     private var counter by mutableStateOf(0)
 
@@ -38,11 +41,10 @@ class DemoViewModel : IvyViewModel<DemoState, DemoEvent>() {
     }
 }
 
-val demoViewModel = DemoViewModel()
-
+context(IvyWalletDI)
 @Composable
 fun DemoScreen(
-    viewModel: DemoViewModel = demoViewModel
+    viewModel: DemoViewModel = viewModel("demo", ::DemoViewModel)
 ) {
     val state = viewModel.uiState()
 

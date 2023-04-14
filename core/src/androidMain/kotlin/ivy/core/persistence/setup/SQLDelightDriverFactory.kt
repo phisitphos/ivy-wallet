@@ -1,4 +1,4 @@
-package ivy.core.persistence
+package ivy.core.persistence.setup
 
 import android.content.Context
 import app.cash.sqldelight.db.SqlDriver

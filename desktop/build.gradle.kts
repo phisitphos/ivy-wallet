@@ -6,6 +6,13 @@ plugins {
 }
 
 kotlin {
+    // Enable the 'context receivers' language feature in the Kotlin compiler
+    sourceSets.all {
+        languageSettings.apply {
+            enableLanguageFeature("ContextReceivers")
+        }
+    }
+
     jvm {
         jvmToolchain(Java.jvmToolchain)
         withJava()

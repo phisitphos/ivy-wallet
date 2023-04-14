@@ -23,6 +23,12 @@ dependencies {
 }
 
 android {
+    sourceSets.all {
+        kotlinOptions {
+            freeCompilerArgs = listOf("-Xcontext-receivers")
+        }
+    }
+
     compileSdk = Android.compileSdk
     defaultConfig {
         applicationId = Android.applicationId
