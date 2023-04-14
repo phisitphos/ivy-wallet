@@ -19,4 +19,7 @@ interface AccountCachePersistence {
 
     context(Raise<PersistenceError>)
     suspend fun deleteByIds(ids: Set<AccountId>)
+
+    context(Raise<PersistenceError>)
+    suspend fun deleteAllCaches()
 }

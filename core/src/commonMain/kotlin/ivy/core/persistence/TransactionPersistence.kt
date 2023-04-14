@@ -4,13 +4,13 @@ import arrow.core.raise.Raise
 import ivy.core.data.AccountId
 import ivy.core.data.Transaction
 import ivy.core.domain.data.TransactionCalcData
+import ivy.core.persistence.data.ItemChange
 import ivy.core.persistence.data.PersistenceError
 import kotlinx.coroutines.flow.Flow
 import java.time.Instant
 
 interface TransactionPersistence {
-    val onSaved: Flow<List<Transaction>>
-    val onDeleted: Flow<List<Transaction>>
+    val onItemChange: Flow<List<ItemChange<Transaction>>>
 
     context(Raise<PersistenceError>)
     fun findTransactions(query: TrnQuery): Flow<List<Transaction>>

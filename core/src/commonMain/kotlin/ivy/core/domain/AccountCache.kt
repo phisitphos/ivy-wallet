@@ -1,13 +1,18 @@
 package ivy.core.domain
 
+import arrow.core.partially1
 import arrow.core.raise.Raise
 import arrow.core.raise.recover
 import ivy.core.data.AccountId
+import ivy.core.data.Transaction
 import ivy.core.domain.data.FinancialData
 import ivy.core.persistence.AccountCachePersistence
 import ivy.core.persistence.AccountPersistence
 import ivy.core.persistence.TransactionPersistence
+import ivy.core.persistence.data.AccountCache
+import ivy.core.persistence.data.ItemChange
 import ivy.core.persistence.data.PersistenceError
+import ivy.core.util.recoverDoingNothing
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
@@ -18,24 +23,22 @@ class IvyAccountCacheService(
     private val accountCachePersistence: AccountCachePersistence
 ) : AccountCacheService {
     init {
-        transactionPersistence.onSaved.onEach { trns ->
-            TODO()
-        }
-        transactionPersistence.onDeleted.onEach { trns ->
+        // TODO: "onEach" does nothing! Collect the flows!
+        transactionPersistence.onItemChange.onEach { changes ->
             recover({
-                val caches = accountCachePersistence.findByAccountIds(
-                    trns.map { it.accountId }.toSet()
-                )
-                TODO()
+                with(accountCachePersistence) {
+                    invalidateAffectedCaches(changes)
+                }
             }) {
-                // do nothing
+                recoverDoingNothing {
+                    accountCachePersistence.deleteAllCaches()
+                }
             }
         }
+
         accountPersistence.onDeleted.onEach { accountIds ->
-            recover({
+            recoverDoingNothing {
                 accountCachePersistence.deleteByIds(accountIds)
-            }) {
-                // do nothing
             }
         }
     }
@@ -56,4 +59,46 @@ interface AccountCacheService {
 
     context(Raise<PersistenceError>)
     suspend fun saveAccountCache(accountId: AccountId, cache: FinancialData)
+}
+
+context(AccountCachePersistence, Raise<PersistenceError>)
+private suspend fun invalidateAffectedCaches(
+    changes: List<ItemChange<Transaction>>
+) {
+    val affectedCaches = findByAccountIds(changes.flatMap(::affectedAccounts).toSet())
+    val needsInvalidation = affectedCaches
+        .filter { cache ->
+            changes.any(::invalidates.partially1(cache))
+        }
+        .map { it.accountId }
+        .toSet()
+        .takeIf { it.isNotEmpty() }
+
+    if (needsInvalidation != null) {
+        deleteByIds(needsInvalidation)
+    }
+}
+
+private fun invalidates(
+    accountCache: AccountCache,
+    change: ItemChange<Transaction>
+): Boolean = with(change) {
+    val cacheAccount = accountCache.accountId
+    val cacheTime = accountCache.cache.newestTransactionTime
+    return when (this) {
+        is ItemChange.Creation -> cacheAccount == created.accountId && created.time.isBefore(cacheTime)
+        is ItemChange.Deletion -> cacheAccount == deleted.accountId && deleted.time.isBefore(cacheTime)
+        is ItemChange.Update -> {
+            (cacheAccount == before.accountId && before.time.isBefore(cacheTime)) ||
+                (cacheAccount == after.accountId && after.time.isBefore(cacheTime))
+        }
+    }
+}
+
+private fun affectedAccounts(change: ItemChange<Transaction>): List<AccountId> = with(change) {
+    when (this) {
+        is ItemChange.Creation -> listOf(created.accountId)
+        is ItemChange.Deletion -> listOf(deleted.accountId)
+        is ItemChange.Update -> listOf(before.accountId, after.accountId)
+    }
 }
