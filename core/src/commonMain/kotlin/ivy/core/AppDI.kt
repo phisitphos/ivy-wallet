@@ -16,17 +16,11 @@ import ivy.core.persistence.impl.IvyTransactionPersistence
 import ivy.core.persistence.setup.createDatabase
 import ivy.core.viewmodel.IvyViewModel
 
-class Persistence(
-    private val accountPersistence: IvyAccountPersistence,
-    private val accountCachePersistence: IvyAccountCachePersistence,
-    private val transactionPersistence: IvyTransactionPersistence
-) : AccountPersistence by accountPersistence,
-    AccountCachePersistence by accountCachePersistence,
-    TransactionPersistence by transactionPersistence
-
 data class IvyWalletDI(
     val httpClient: Lazy<HttpClient>,
-    val persistence: Lazy<Persistence>,
+    private val accountPersistence: Lazy<AccountPersistence>,
+    private val accountCachePersistence: Lazy<AccountCachePersistence>,
+    private val transactionPersistence: Lazy<TransactionPersistence>,
     val exchangeProvider: Lazy<ExchangeRatesProvider>,
     val accountCacheService: Lazy<AccountCacheService>
 )
@@ -49,16 +43,12 @@ fun ivyWalletDI(
     val transactionPersistence = lazy { IvyTransactionPersistence() }
     val accountPersistence = lazy { IvyAccountPersistence() }
     val accountCachePersistence = lazy { IvyAccountCachePersistence() }
-    val persistence = lazy {
-        Persistence(
-            accountPersistence = accountPersistence.value,
-            transactionPersistence = transactionPersistence.value,
-            accountCachePersistence = accountCachePersistence.value
-        )
-    }
+
     val di = IvyWalletDI(
         httpClient = httpClient,
-        persistence = persistence,
+        accountPersistence = accountPersistence,
+        accountCachePersistence = accountCachePersistence,
+        transactionPersistence = transactionPersistence,
         exchangeProvider = lazy { FawazahmedExchangeRatesProvider() },
         accountCacheService = lazy {
             IvyAccountCacheService(
