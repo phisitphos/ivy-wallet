@@ -18,7 +18,7 @@ import java.time.Instant
 
 context(TransactionPersistence, AccountCacheService, Raise<PersistenceError>)
 @OptIn(ExperimentalCoroutinesApi::class)
-fun accountFinancialData(
+fun accountBalance(
     accountId: AccountId
 ): Flow<FinancialData> = findAccountCache(accountId).flatMapLatest { cacheData ->
     findCalcTransactions(
@@ -27,13 +27,14 @@ fun accountFinancialData(
             after = cacheData?.newestTransactionTime ?: Instant.MIN
         )
     ).map(
-        ::financialDataFrom.partially1(accountId)
+        ::accountFinancialData.partially1(accountId)
     ).map { afterCacheData ->
-        val financialData = cacheData?.plus(afterCacheData) ?: afterCacheData
-        if (cacheData != afterCacheData) {
-            saveAccountCache(accountId, financialData)
+        val result = cacheData?.plus(afterCacheData) ?: afterCacheData
+        if (cacheData != result) {
+            // update the cache
+            saveAccountCache(accountId, result)
         }
-        financialData
+        result
     }
 }
 
@@ -63,7 +64,7 @@ operator fun Map<AssetCode, PositiveDouble>.plus(
     }
 }
 
-fun financialDataFrom(
+fun accountFinancialData(
     accountId: AccountId,
     transactions: List<TransactionCalcData>
 ): FinancialData = foldTransactions(

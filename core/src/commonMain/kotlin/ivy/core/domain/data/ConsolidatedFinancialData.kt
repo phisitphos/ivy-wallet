@@ -1,6 +1,7 @@
 package ivy.core.domain.data
 
 import ivy.core.data.MonetaryValue
+import ivy.core.data.primitives.NonNegativeInt
 
 /**
  * A data class representing a financial summary with incomes and expenses converted to the same currency
@@ -14,6 +15,6 @@ import ivy.core.data.MonetaryValue
 data class ConsolidatedFinancialData(
     val income: MonetaryValue,
     val expense: MonetaryValue,
-    val incomesCount: Int,
-    val expensesCount: Int
+    val incomesCount: NonNegativeInt,
+    val expensesCount: NonNegativeInt
 )

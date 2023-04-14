@@ -59,3 +59,5 @@ value class NonNegativeDouble private constructor(val value: Double) : Comparabl
         operator fun invoke(value: Double): NonNegativeDouble = unsafe(value)
     }
 }
+
+fun PositiveDouble.toNonNegative(): NonNegativeDouble = NonNegativeDouble(this.value)
