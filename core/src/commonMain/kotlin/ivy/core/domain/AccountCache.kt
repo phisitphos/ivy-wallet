@@ -9,6 +9,7 @@ import ivy.core.persistence.AccountPersistence
 import ivy.core.persistence.TransactionPersistence
 import ivy.core.persistence.data.PersistenceError
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.onEach
 
 class IvyAccountCacheService(
@@ -41,7 +42,7 @@ class IvyAccountCacheService(
 
     context(Raise<PersistenceError>)
     override fun findAccountCache(accountId: AccountId): Flow<FinancialData?> =
-        accountCachePersistence.findByAccountId(accountId)
+        accountCachePersistence.findByAccountId(accountId).distinctUntilChanged()
 
     context(Raise<PersistenceError>)
     override suspend fun saveAccountCache(accountId: AccountId, cache: FinancialData) {

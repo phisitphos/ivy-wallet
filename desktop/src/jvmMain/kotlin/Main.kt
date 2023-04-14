@@ -4,7 +4,7 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.window.Window
 import androidx.compose.ui.window.application
 import ivy.core.App
-import ivy.core.persistence.DriverFactory
+import ivy.core.persistence.SQLDelightDriverFactory
 import ivy.core.persistence.playWithDb
 import ivy.home.HomeScreen
 
@@ -14,7 +14,7 @@ fun main() = application {
         mutableStateOf(emptyList<String>())
     }
     LaunchedEffect(Unit) {
-        people = playWithDb(DriverFactory())
+        people = playWithDb(SQLDelightDriverFactory())
     }
 
     Window(onCloseRequest = ::exitApplication) {

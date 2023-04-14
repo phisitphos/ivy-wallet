@@ -8,7 +8,7 @@ import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.*
 import ivy.core.App
-import ivy.core.persistence.DriverFactory
+import ivy.core.persistence.SQLDelightDriverFactory
 import ivy.core.persistence.playWithDb
 import ivy.home.HomeScreen
 
@@ -22,7 +22,7 @@ class MainActivity : AppCompatActivity() {
             }
 
             LaunchedEffect(Unit) {
-                people = playWithDb(DriverFactory(applicationContext))
+                people = playWithDb(SQLDelightDriverFactory(applicationContext))
             }
 
             MaterialTheme {

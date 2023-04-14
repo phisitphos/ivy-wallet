@@ -30,7 +30,9 @@ fun accountFinancialData(
         ::financialDataFrom.partially1(accountId)
     ).map { afterCacheData ->
         val financialData = cacheData?.plus(afterCacheData) ?: afterCacheData
-        saveAccountCache(accountId, financialData)
+        if (cacheData != afterCacheData) {
+            saveAccountCache(accountId, financialData)
+        }
         financialData
     }
 }
