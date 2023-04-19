@@ -18,16 +18,16 @@ import ivy.core.viewmodel.IvyViewModel
 
 data class IvyWalletDI(
     val httpClient: Lazy<HttpClient>,
-    private val accountPersistence: Lazy<AccountPersistence>,
-    private val accountCachePersistence: Lazy<AccountCachePersistence>,
-    private val transactionPersistence: Lazy<TransactionPersistence>,
+    val accountPersistence: Lazy<AccountPersistence>,
+    val accountCachePersistence: Lazy<AccountCachePersistence>,
+    val transactionPersistence: Lazy<TransactionPersistence>,
     val exchangeProvider: Lazy<ExchangeRatesProvider>,
     val accountCacheService: Lazy<AccountCacheService>
 )
 
 val viewModels = mutableMapOf<String, IvyViewModel<*, *>>()
 
-inline fun <reified UiState, reified Event, reified VM : IvyViewModel<UiState, Event>> IvyWalletDI.viewModel(
+inline fun <reified S, reified E, reified VM : IvyViewModel<S, E>> IvyWalletDI.viewModel(
     key: String,
     crossinline produce: IvyWalletDI.() -> VM
 ): VM {

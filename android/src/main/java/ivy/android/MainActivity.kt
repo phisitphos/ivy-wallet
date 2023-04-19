@@ -5,9 +5,9 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.material.MaterialTheme
-import ivy.core.App
 import ivy.core.ivyWalletDI
 import ivy.core.persistence.setup.SQLDelightDriverFactory
+import ivy.core.temp.App
 import ivy.home.HomeScreen
 
 class MainActivity : AppCompatActivity() {
