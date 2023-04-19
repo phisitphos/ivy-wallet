@@ -29,7 +29,7 @@ kotlin {
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Coroutines.version}")
 
                 // region Kodein (DI)
-                implementation("org.kodein.di:kodein-di:${Deps.Kodein.version}")
+                api("org.kodein.di:kodein-di:${Deps.Kodein.version}")
                 // endregion
 
                 // region ArrowKt (Functional Programming)

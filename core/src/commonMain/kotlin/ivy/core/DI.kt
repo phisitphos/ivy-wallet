@@ -1,6 +1,6 @@
 package ivy.core
 
-import app.cash.sqldelight.db.SqlDriver
+import androidx.compose.runtime.*
 import ivy.core.domain.AccountCacheService
 import ivy.core.domain.IvyAccountCacheService
 import ivy.core.exchangerates.ExchangeRatesProvider
@@ -13,14 +13,15 @@ import ivy.core.persistence.impl.IvyAccountCachePersistence
 import ivy.core.persistence.impl.IvyAccountPersistence
 import ivy.core.persistence.impl.IvyTransactionPersistence
 import ivy.core.persistence.setup.createDatabase
+import ivy.core.viewmodel.IvyViewModel
 import org.kodein.di.DI
 import org.kodein.di.bindInstance
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 
-fun coreDI(sqlDriver: SqlDriver) = DI {
+val coreDi = DI {
     bindSingleton { createHttpClient() }
-    bindSingleton { createDatabase(sqlDriver) }
+    bindSingleton { createDatabase(instance()) }
     bindSingleton<AccountCacheService> { IvyAccountCacheService(instance(), instance(), instance()) }
 
     bindInstance<AccountPersistence> { IvyAccountPersistence() }
@@ -28,3 +29,21 @@ fun coreDI(sqlDriver: SqlDriver) = DI {
     bindInstance<TransactionPersistence> { IvyTransactionPersistence() }
     bindInstance<ExchangeRatesProvider> { FawazahmedExchangeRatesProvider() }
 }
+
+val LocalDI = compositionLocalOf<ImmutableDI> { error("CompositionLocal DI not provided!") }
+
+@Composable
+inline fun <reified S, reified E, reified VM : IvyViewModel<S, E>> viewModel(
+    tag: String = "",
+    crossinline producer: @DisallowComposableCalls (di: ImmutableDI) -> VM
+): VM {
+    val di = LocalDI.current
+    return remember(VM::class, tag) {
+        producer(di)
+    }
+}
+
+@Immutable
+data class ImmutableDI(
+    val di: DI
+)

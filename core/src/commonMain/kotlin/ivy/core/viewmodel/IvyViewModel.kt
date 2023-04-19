@@ -1,10 +1,15 @@
 package ivy.core.viewmodel
 
 import androidx.compose.runtime.Composable
+import ivy.core.ImmutableDI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
+import org.kodein.di.DI
+import org.kodein.di.DIAware
 
-abstract class IvyViewModel<UiState, Event> {
+abstract class IvyViewModel<UiState, Event>(di: ImmutableDI) : DIAware {
+    override val di: DI = di.di
+
     @Composable
     abstract fun uiState(): UiState
 
