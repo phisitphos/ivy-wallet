@@ -4,14 +4,13 @@ import ivy.core.ImmutableDI
 import ivy.core.coreDi
 import ivy.core.persistence.setup.SQLDelightDriverFactory
 import ivy.root.IvyWalletApp
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
 
 val di = ImmutableDI(
-    DI {
-        bindSingleton { SQLDelightDriverFactory().createDriver() }
-        extend(coreDi)
-    }
+    di = coreDi(
+        sqlDriverProvider = {
+            SQLDelightDriverFactory().createDriver()
+        }
+    )
 )
 
 fun main() {

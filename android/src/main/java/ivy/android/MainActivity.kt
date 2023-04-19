@@ -7,16 +7,15 @@ import ivy.core.ImmutableDI
 import ivy.core.coreDi
 import ivy.core.persistence.setup.SQLDelightDriverFactory
 import ivy.root.IvyWalletApp
-import org.kodein.di.DI
-import org.kodein.di.bindSingleton
 
 class MainActivity : AppCompatActivity() {
 
     private val di = ImmutableDI(
-        DI {
-            bindSingleton { SQLDelightDriverFactory(applicationContext).createDriver() }
-            extend(coreDi)
-        }
+        di = coreDi(
+            sqlDriverProvider = {
+                SQLDelightDriverFactory(applicationContext).createDriver()
+            }
+        )
     )
 
     override fun onCreate(savedInstanceState: Bundle?) {

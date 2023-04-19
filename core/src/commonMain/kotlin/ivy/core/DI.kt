@@ -1,6 +1,7 @@
 package ivy.core
 
 import androidx.compose.runtime.*
+import app.cash.sqldelight.db.SqlDriver
 import ivy.core.domain.AccountCacheService
 import ivy.core.domain.IvyAccountCacheService
 import ivy.core.exchangerates.ExchangeRatesProvider
@@ -19,7 +20,8 @@ import org.kodein.di.bindInstance
 import org.kodein.di.bindSingleton
 import org.kodein.di.instance
 
-val coreDi = DI {
+fun coreDi(sqlDriverProvider: () -> SqlDriver) = DI {
+    bindSingleton<SqlDriver> { sqlDriverProvider() }
     bindSingleton { createHttpClient() }
     bindSingleton { createDatabase(instance()) }
     bindSingleton<AccountCacheService> { IvyAccountCacheService(instance(), instance(), instance()) }

@@ -1,3 +1,5 @@
 package ivy.home
 
-sealed interface HomeEvent
+sealed interface HomeEvent {
+    object ButtonClick : HomeEvent
+}
