@@ -10,14 +10,14 @@ repositories {
 }
 
 dependencies {
-    implementation(project(":core"))
     implementation("androidx.activity:activity-compose:1.7.0")
     implementation("androidx.appcompat:appcompat:1.6.1")
     implementation("androidx.core:core-ktx:1.9.0")
 
-    implementation(project(":home"))
+    implementation(project(":core"))
+    implementation(project(":ivy-wallet"))
 
-    // Becuase of Proguard
+    // Because of Proguard
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:${Deps.KotlinXSerialization.version}")
 
 }

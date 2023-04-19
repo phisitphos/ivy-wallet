@@ -23,4 +23,5 @@ include(
     ":desktop",
     ":core",
     ":home",
+    ":ivy-wallet"
 )

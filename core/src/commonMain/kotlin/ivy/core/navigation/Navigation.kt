@@ -2,9 +2,9 @@ package ivy.core.navigation
 
 import androidx.compose.runtime.*
 
-private val backstack = mutableStateListOf<Screen>()
-
 interface Screen
+
+private val backstack = mutableStateListOf<Screen>()
 
 @Composable
 fun NavHost(

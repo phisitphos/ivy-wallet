@@ -1,11 +1,9 @@
 package ivy.core.viewmodel
 
 import androidx.compose.runtime.Composable
-import ivy.core.IvyWalletDI
 import kotlinx.coroutines.*
 import kotlinx.coroutines.flow.MutableSharedFlow
 
-context(IvyWalletDI)
 abstract class IvyViewModel<UiState, Event> {
     @Composable
     abstract fun uiState(): UiState

@@ -20,9 +20,9 @@ kotlin {
     sourceSets {
         val jvmMain by getting {
             dependencies {
-                implementation(project(":core"))
                 implementation(compose.desktop.currentOs)
-                implementation(project(":home"))
+                implementation(project(":core"))
+                implementation(project(":ivy-wallet"))
             }
         }
         val jvmTest by getting

@@ -38,4 +38,9 @@ object Deps {
         //https://ktor.io/docs/client-dependencies.html
         const val version = "2.2.4"
     }
+
+    object Kodein {
+        //https://kosi-libs.org/kodein
+        const val version = "7.19.0"
+    }
 }
