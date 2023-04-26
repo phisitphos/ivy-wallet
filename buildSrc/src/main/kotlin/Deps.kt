@@ -43,4 +43,15 @@ object Deps {
         //https://slackhq.github.io/circuit/setup/
         const val version = "0.8.0"
     }
+
+    object DI {
+        object Dagger {
+            //https://dagger.dev/
+            const val version = "2.45"
+        }
+        object Anvil {
+            //https://github.com/square/anvil
+            const val version = "2.4.5"
+        }
+    }
 }

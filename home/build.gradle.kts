@@ -3,6 +3,7 @@ plugins {
     id("org.jetbrains.compose")
     id("com.android.library")
     id("com.google.devtools.ksp")
+    id("com.squareup.anvil")
 }
 
 kotlin {
@@ -21,6 +22,7 @@ kotlin {
         val commonMain by getting {
             dependencies {
                 implementation(project(":core"))
+                implementation("com.google.dagger:dagger:${Deps.DI.Dagger.version}")
             }
         }
         val commonTest by getting {
@@ -44,3 +46,15 @@ android {
         targetCompatibility = Java.version
     }
 }
+
+// region DI (Dagger2 + Anvil)
+ksp {
+    arg("anvil.merge.component", "true")
+    arg("anvil.generate.factory", "true")
+}
+
+anvil {
+    // Enable Dagger Factory generation
+    generateDaggerFactories.set(true)
+}
+// endregion

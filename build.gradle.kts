@@ -39,6 +39,8 @@ buildscript {
     dependencies {
         // https://github.com/pinterest/ktlint
         classpath("com.pinterest:ktlint:0.45.1")
+        classpath("com.google.dagger:dagger:${Deps.DI.Dagger.version}")
+        classpath("com.squareup.anvil:gradle-plugin:${Deps.DI.Anvil.version}")
     }
 }
 

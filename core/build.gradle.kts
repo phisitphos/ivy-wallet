@@ -5,6 +5,7 @@ plugins {
     id("com.google.devtools.ksp")
     id("app.cash.sqldelight") version Deps.SQLDelight.version
     kotlin("plugin.serialization")
+    id("com.squareup.anvil")
 }
 
 kotlin {
@@ -27,6 +28,12 @@ kotlin {
                 api(compose.material)
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Coroutines.version}")
+
+                // region DI
+                implementation("com.google.dagger:dagger:${Deps.DI.Dagger.version}")
+                api("com.squareup.anvil:annotations:${Deps.DI.Anvil.version}")
+                api("com.slack.circuit:circuit-codegen-annotations:${Deps.Circuit.version}")
+                // endregion
 
                 // region Circuit
                 api("com.slack.circuit:circuit-foundation:${Deps.Circuit.version}")
@@ -125,6 +132,7 @@ android {
 dependencies {
 //    val arrowKsp = Deps.Arrow.Optics.ksp
 //    add("kspCommonMain", arrowKsp)
+    add("ksp", "com.slack.circuit:circuit-codegen:${Deps.Circuit.version}")
 }
 
 sqldelight {
@@ -144,3 +152,15 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile>().configureEach 
 tasks.named<Test>("jvmTest") {
     useJUnitPlatform()
 }
+
+// region DI (Dagger2 + Anvil)
+ksp {
+    arg("anvil.merge.component", "true")
+    arg("anvil.generate.factory", "true")
+}
+
+anvil {
+    // Enable Dagger Factory generation
+    generateDaggerFactories.set(true)
+}
+// endregion
