@@ -28,8 +28,11 @@ kotlin {
 
                 implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Coroutines.version}")
 
-                // region Kodein (DI)
-                api("org.kodein.di:kodein-di:${Deps.Kodein.version}")
+                // region Circuit
+                api("com.slack.circuit:circuit-foundation:${Deps.Circuit.version}")
+                api("com.slack.circuit:circuit-runtime:${Deps.Circuit.version}")
+                api("com.slack.circuit:circuit-runtime-presenter:${Deps.Circuit.version}")
+                api("com.slack.circuit:circuit-runtime-ui:${Deps.Circuit.version}")
                 // endregion
 
                 // region ArrowKt (Functional Programming)
