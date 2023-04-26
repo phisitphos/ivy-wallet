@@ -48,6 +48,10 @@ android {
 }
 
 // region DI (Dagger2 + Anvil)
+dependencies {
+    add("ksp", "com.slack.circuit:circuit-codegen:${Deps.Circuit.version}")
+}
+
 ksp {
     arg("anvil.merge.component", "true")
     arg("anvil.generate.factory", "true")
