@@ -5,7 +5,7 @@ object Deps {
     }
 
     object Arrow {
-        //https://apidocs.arrow-kt.io/
+        //https://github.com/arrow-kt/arrow/releases
         const val version = "1.2.0-RC"
 
         object Optics {
@@ -46,7 +46,7 @@ object Deps {
 
     object DI {
         object Dagger {
-            //https://dagger.dev/
+            //https://github.com/google/dagger/releases
             const val version = "2.45"
         }
         object Anvil {
