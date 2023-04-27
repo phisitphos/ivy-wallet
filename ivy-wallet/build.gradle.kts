@@ -4,6 +4,7 @@ plugins {
     id("com.android.library")
     id("com.google.devtools.ksp")
     id("com.squareup.anvil")
+    id("kotlin-parcelize")
 }
 
 kotlin {

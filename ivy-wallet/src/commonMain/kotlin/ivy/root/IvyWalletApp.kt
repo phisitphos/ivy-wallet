@@ -6,8 +6,7 @@ import com.slack.circuit.foundation.*
 import ivy.core.ui.IvyUI
 import ivy.home.HomeScreen
 
-val config = CircuitConfig.Builder()
-    .build()
+val config = CircuitConfig.Builder().build()
 
 @Composable
 fun IvyWalletApp() {

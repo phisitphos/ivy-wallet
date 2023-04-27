@@ -2,10 +2,12 @@ plugins {
     kotlin("multiplatform")
     id("org.jetbrains.compose")
     id("com.android.library")
+    kotlin("kapt")
     id("com.google.devtools.ksp")
     id("app.cash.sqldelight") version Deps.SQLDelight.version
     kotlin("plugin.serialization")
     id("com.squareup.anvil")
+    id("kotlin-parcelize")
 }
 
 kotlin {
@@ -27,7 +29,9 @@ kotlin {
                 api(compose.foundation)
                 api(compose.material)
 
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Coroutines.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:${Deps.Kotlin.coroutines}")
+                api("org.jetbrains.kotlin:kotlin-parcelize-runtime:${extra["kotlin.version"] as String}")
+
 
                 // region DI
                 implementation("com.google.dagger:dagger:${Deps.DI.Dagger.version}")
@@ -70,7 +74,7 @@ kotlin {
         val androidMain by getting {
             dependencies {
                 dependsOn(commonMain)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Deps.Coroutines.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Deps.Kotlin.coroutines}")
                 implementation("io.ktor:ktor-client-okhttp:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:android-driver:${Deps.SQLDelight.version}")
             }
@@ -79,7 +83,7 @@ kotlin {
         val jvmMain by getting {
             dependencies {
                 dependsOn(commonMain)
-                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Deps.Coroutines.version}")
+                implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core-jvm:${Deps.Kotlin.coroutines}")
                 implementation("io.ktor:ktor-client-apache:${Deps.Ktor.version}")
                 implementation("app.cash.sqldelight:sqlite-driver:${Deps.SQLDelight.version}")
             }
@@ -132,6 +136,7 @@ android {
 dependencies {
 //    val arrowKsp = Deps.Arrow.Optics.ksp
 //    add("kspCommonMain", arrowKsp)
+    add("kapt", "com.google.dagger:dagger-compiler:${Deps.DI.Dagger.version}")
     add("ksp", "com.slack.circuit:circuit-codegen:${Deps.Circuit.version}")
 }
 
