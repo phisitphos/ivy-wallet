@@ -137,6 +137,7 @@ dependencies {
 //    val arrowKsp = Deps.Arrow.Optics.ksp
 //    add("kspCommonMain", arrowKsp)
 //    add("kapt", "com.google.dagger:dagger-compiler:${Deps.DI.Dagger.version}")
+//    add("kapt", "com.google.dagger:dagger-android-processor:${Deps.DI.Dagger.version}")
     add("ksp", "com.slack.circuit:circuit-codegen:${Deps.Circuit.version}")
 }
 
