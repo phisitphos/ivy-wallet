@@ -5,7 +5,6 @@ import io.kotest.matchers.shouldBe
 import io.kotest.property.Arb
 import io.kotest.property.arbitrary.*
 import io.kotest.property.checkAll
-import kotlinx.serialization.Serializable
 import kotlinx.serialization.json.Json
 
 @Serializable

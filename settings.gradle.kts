@@ -15,9 +15,9 @@ rootProject.name = "Ivy-Wallet"
 include(
     ":android",
     ":desktop",
-    ":core",
+    ":core:ui",
     ":home",
-    ":ivy-wallet"
+    ":ivy-wallet-app"
 )
 
 for (project in rootProject.children) {

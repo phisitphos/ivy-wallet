@@ -17,7 +17,6 @@ import ivy.core.exchangerates.ExchangeRatesProvider
 import ivy.core.exchangerates.data.ExchangeRates
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
-import kotlinx.serialization.Serializable
 
 /**
  * API:

@@ -2,7 +2,6 @@ package ivy.core.domain
 
 import arrow.core.partially1
 import arrow.core.raise.Raise
-import arrow.core.raise.recover
 import ivy.core.data.AccountId
 import ivy.core.data.Transaction
 import ivy.core.domain.data.FinancialData

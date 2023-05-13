@@ -1,6 +1,6 @@
 [versions]
 jvm = "17"
-kotlin = "1.8.21"
+kotlin = "1.8.20"
 coroutines = "1.7.0"
 arrow = "1.2.0-RC"
 kotest = "5.6.2"
