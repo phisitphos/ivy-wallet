@@ -6,6 +6,7 @@ import org.gradle.api.artifacts.VersionCatalog
 import org.gradle.api.artifacts.VersionCatalogsExtension
 import org.gradle.api.provider.Provider
 import org.gradle.kotlin.dsl.the
+import org.gradle.plugin.use.PluginDependency
 
 internal
 val Project.libs: VersionCatalog
@@ -83,4 +84,7 @@ internal
 val VersionCatalog.thirdpartyUUID: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("thirdparty-uuid").get()
 
+internal
+val VersionCatalog.pluginSqldelight: Provider<PluginDependency>
+    get() = findPlugin("sqldelight").get()
 
