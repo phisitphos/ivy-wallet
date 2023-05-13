@@ -13,11 +13,13 @@ plugins {
 rootProject.name = "Ivy-Wallet"
 
 include(
-    ":android",
-    ":desktop",
     ":core:ui",
-    ":home",
-    ":ivy-wallet-app"
+    ":core:logic",
+    ":ivy-wallet-monolith",
+    ":ivy-wallet-screens",
+    ":target-android",
+    ":target-desktop",
+    ":screen-home"
 )
 
 for (project in rootProject.children) {

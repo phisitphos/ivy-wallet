@@ -1,5 +1,5 @@
 plugins {
-    id("shared-ui-library")
+    id("shared-ui")
 }
 
 kotlin {

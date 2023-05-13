@@ -38,3 +38,49 @@ val VersionCatalog.androidxCoreKtx: Provider<MinimalExternalModuleDependency>
 internal
 val VersionCatalog.androidxActivityCompose: Provider<MinimalExternalModuleDependency>
     get() = findLibrary("androidx-activity-compose").get()
+
+internal
+val VersionCatalog.arrowCore: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("arrow-core").get()
+
+internal
+val VersionCatalog.kotestAssertions: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-assertions").get()
+
+internal
+val VersionCatalog.kotestEngine: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-engine").get()
+
+internal
+val VersionCatalog.kotestProperty: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-property").get()
+
+internal
+val VersionCatalog.kotestDatatest: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-datatest").get()
+
+internal
+val VersionCatalog.kotestArrow: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-arrow").get()
+
+internal
+val VersionCatalog.kotestJunit5: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotest-junit5").get()
+
+internal
+val VersionCatalog.kotlinStdlib: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotlin-stdlib").get()
+
+internal
+val VersionCatalog.kotlinCoroutinesCore: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotlin-coroutines-core").get()
+
+internal
+val VersionCatalog.kotlinxDatetime: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("kotlinx-datetime").get()
+
+internal
+val VersionCatalog.thirdpartyUUID: Provider<MinimalExternalModuleDependency>
+    get() = findLibrary("thirdparty-uuid").get()
+
+
